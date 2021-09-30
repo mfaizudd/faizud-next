@@ -1,10 +1,32 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { signOut, useSession } from "next-auth/client"
+import Link from "next/link";
 import MiniPopup from "./MiniPopup";
 
 const Header: React.FC = () => {
+    const router = useRouter();
+    const isActive = (pathname: string) => router.pathname === pathname;
     const [popupHidden, setPopupHidden] = useState(true);
+    const [session, loading] = useSession();
+
+    let popupItems = (
+        <MiniPopup hidden={popupHidden} >
+            <Link href="/api/auth/signin">
+                <a href="/api/auth/signin" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-1">Log in</a>
+            </Link>
+        </MiniPopup>
+    )
+
+    if (session) {
+        popupItems = (
+            <MiniPopup hidden={popupHidden} >
+                <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-0">Your Profile</a>
+                <a onClick={_=>signOut()} href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-1">Sign out</a>
+            </MiniPopup>
+        )
+    }
 
     return (
         <nav className="bg-gray-800">
@@ -52,11 +74,7 @@ const Header: React.FC = () => {
                         </button>
                     </div>
 
-                    <MiniPopup hidden={popupHidden} >
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-0">Your Profile</a>
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-1">Settings</a>
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-2">Sign out</a>
-                    </MiniPopup>
+                    {popupItems}
                     </div>
                 </div>
                 </div>
