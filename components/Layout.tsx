@@ -18,7 +18,7 @@ const Layout: React.FC<LayoutProps> = (props) => {
 
             <Header />
 
-            <main className="text-center">
+            <main>
 
                 { props.children }
 
