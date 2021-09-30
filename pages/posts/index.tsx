@@ -1,13 +1,25 @@
 import type { NextPage } from 'next'
 import Link from 'next/link';
 import Layout from 'components/Layout'
-import { PrismaClient } from '.prisma/client';
-import { GetServerSideProps } from 'next';
+import prisma from 'lib/prisma';
+import { GetStaticProps } from 'next';
+import superjson from 'superjson'
+import { Post } from '.prisma/client';
 
-const prisma = new PrismaClient();
+interface PostsProps {
+    posts: Post[];
+}
 
-export const getServerSideProps: GetServerSideProps = async () => {
-    const posts = await prisma.post.findMany();
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    
+    const posts = await prisma.post.findMany({
+        where: {published: true},
+        include: {
+            author: {
+                select: { name: true }
+            }
+        },
+    });
     return {
         props: {
             posts
@@ -15,11 +27,13 @@ export const getServerSideProps: GetServerSideProps = async () => {
     }
 }
 
-const Posts: NextPage = ({posts}: any) => {
+const Posts: NextPage<PostsProps> = ({posts}) => {
     return (
         <Layout title="Posts">
-            {posts.map((post:any) => (
-                <p key={post.id}>{post.name}</p>
+            {posts.map((post) => (
+                <Link href={`/posts/${post.id}`} key={post.id}>
+                    {post.title}
+                </Link>
             ))}
             <Link href="/">Back</Link>
         </Layout>
