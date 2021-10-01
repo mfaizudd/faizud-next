@@ -30,24 +30,29 @@ const Home: NextPage<PostsProps> = ({posts}) => {
     const date = new Date().getFullYear().toString();
     return (
         <Layout title="Index">
-            <h1 className="text-4xl mx-auto">
+            <h1 className="text-4xl mx-auto text-center">
                 Faizud.Net
             </h1>
 
-            <p>
+            <p className="text-center">
                 {"Muhammad Faizud Daroin's personal website"}
             </p>
-            <Link href="/posts">Posts</Link>
-            {posts.map(post => (
-                <Card
-                    key={post.id}
-                    image="https://u.cubeupload.com/mfaizudd/mh014byfaizuddde8rdx.jpg"
-                    category="Some category"
-                    title={post.title}
-                    description={post.content ?? ""}
-                    route="/posts"
-                />
-            ))}
+            <div className="flex flex-row">
+                <div className="w-7/12">
+                </div>
+                <div className="w-5/12">
+                    {posts.map(post => (
+                        <Card
+                            key={post.id}
+                            image="https://u.cubeupload.com/mfaizudd/mh014byfaizuddde8rdx.jpg"
+                            category="Some category"
+                            title={post.title}
+                            description={post.content ?? ""}
+                            route="/posts"
+                        />
+                    ))}
+                </div>
+            </div>
         </Layout>
     )
 }
