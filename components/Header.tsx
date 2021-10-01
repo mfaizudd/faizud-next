@@ -1,20 +1,18 @@
 import Image from "next/image";
 import { useState } from "react";
-import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/client"
 import Link from "next/link";
+import NavLink from "./NavLink";
 import MiniPopup from "./MiniPopup";
 
 const Header: React.FC = () => {
-    const router = useRouter();
-    const isActive = (pathname: string) => router.pathname === pathname;
     const [popupHidden, setPopupHidden] = useState(true);
     const [session, loading] = useSession();
 
     let popupItems = (
         <MiniPopup hidden={popupHidden} >
             <Link href="/api/auth/signin">
-                <a href="/api/auth/signin" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-1">Log in</a>
+                <a className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-1">Log in</a>
             </Link>
         </MiniPopup>
     )
@@ -48,11 +46,8 @@ const Header: React.FC = () => {
                     </div>
                     <div className="hidden sm:block sm:ml-6">
                     <div className="flex space-x-4">
-                        <a href="#" className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Home</a>
-
-                        <a href="#" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Posts</a>
-
-                        <a href="#" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Projects</a>
+                        <NavLink route="/" name="Home" />
+                        <NavLink route="/posts" name="Posts" />
                     </div>
                     </div>
                 </div>
