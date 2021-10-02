@@ -30,11 +30,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 const Posts: NextPage<PostsProps> = ({posts}) => {
     return (
         <Layout title="Posts">
+            <div className="flex flex-row">
             {posts.map((post) => (
                 <Link href={`/posts/${post.id}`} key={post.id}>
                     {post.title}
                 </Link>
             ))}
+            </div>
             <Link href="/">Back</Link>
         </Layout>
     )
