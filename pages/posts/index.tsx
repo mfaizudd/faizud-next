@@ -37,7 +37,9 @@ const Posts: NextPage<PostsProps> = ({posts}) => {
                 </Link>
             ))}
             </div>
-            <Link href="/">Back</Link>
+            <div className="text-center">
+                <Link href="/">Back</Link>
+            </div>
         </Layout>
     )
 }

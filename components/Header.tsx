@@ -9,21 +9,24 @@ const Header: React.FC = () => {
     const [popupHidden, setPopupHidden] = useState(true);
     const [session, loading] = useSession();
 
-    let popupItems = (
-        <MiniPopup hidden={popupHidden} >
-            <Link href="/api/auth/signin">
-                <a className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-1">Log in</a>
-            </Link>
-        </MiniPopup>
-    )
+    // let popupItems = (
+    //     <MiniPopup hidden={popupHidden} >
+    //         <Link href="/api/auth/signin">
+    //             <a className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-1">Log in</a>
+    //         </Link>
+    //     </MiniPopup>
+    // )
 
     if (session) {
-        popupItems = (
-            <MiniPopup hidden={popupHidden} >
-                <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-0">Your Profile</a>
-                <a onClick={_=>signOut()} href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-1">Sign out</a>
-            </MiniPopup>
-        )
+        // popupItems = (
+        //     <MiniPopup hidden={popupHidden} >
+        //         <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-0">Your Profile</a>
+        //         <a onClick={_=>signOut()} href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-1">Sign out</a>
+        //     </MiniPopup>
+        // )
+
+
+        // Enable edit buttons and stuff
     }
 
     return (
@@ -44,14 +47,14 @@ const Header: React.FC = () => {
                 <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                     <div className="flex-shrink-0 flex items-center">
                     </div>
-                    <div className="hidden sm:block sm:ml-6">
-                    <div className="flex space-x-4">
-                        <NavLink route="/" name="Home" />
-                        <NavLink route="/posts" name="Posts" />
-                    </div>
+                    <div className="hidden sm:block w-full">
+                        <div className="flex space-x-4 w-full justify-center">
+                            <NavLink route="/" name="Home" />
+                            <NavLink route="/posts" name="Posts" />
+                        </div>
                     </div>
                 </div>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                {/* <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                     <button type="button" className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                     <span className="sr-only">View notifications</span>
                     <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -71,7 +74,7 @@ const Header: React.FC = () => {
 
                     {popupItems}
                     </div>
-                </div>
+                </div> */}
                 </div>
             </div>
 
