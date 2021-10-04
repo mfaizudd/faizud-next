@@ -4,6 +4,7 @@ import Form from "components/Form";
 import InputText from "components/InputText";
 import Router from "next/router";
 import Submit from "components/Submit";
+import TextArea from "components/TextArea";
 
 const Draft: React.FC = () => {
     const [title, setTitle] = useState('');
@@ -20,7 +21,7 @@ const Draft: React.FC = () => {
             });
             await Router.push('/drafts');
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
 
@@ -28,7 +29,7 @@ const Draft: React.FC = () => {
         <Layout>
             <Form onSubmit={onSubmit} method="post">
                 <InputText value={title} onChange={e=>setTitle(e.target.value)} name="title"/>
-                <InputText value={content} onChange={e=>setContent(e.target.value)} name="content"/>
+                <TextArea value={content} onChange={e=>setContent(e.target.value)} name="content"/>
                 <div className="px-3 my-3">
                     <Submit label="Create"/>
                 </div>
