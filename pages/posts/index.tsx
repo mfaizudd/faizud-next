@@ -3,8 +3,9 @@ import Link from 'next/link';
 import Layout from 'components/Layout'
 import prisma from 'lib/prisma';
 import { GetStaticProps } from 'next';
-import superjson from 'superjson'
+import Card from 'components/Card';
 import { Post } from '.prisma/client';
+import { useSession } from 'next-auth/client';
 
 interface PostsProps {
     posts: Post[];
@@ -28,14 +29,40 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 }
 
 const Posts: NextPage<PostsProps> = ({posts}) => {
+    const [session, loading] = useSession();
+    let loadingElement = <></>;
+    let createElement = <></>;
+    if (loading) {
+        loadingElement = (
+            <div className="mx-auto">
+                Loading...
+            </div>
+        )
+    }
+    if (session) {
+        createElement = (
+            <Card
+                title="Create"
+                description="Create new post"
+                route="/posts/create"
+            />
+        )
+    }
     return (
         <Layout title="Posts">
-            <div className="flex flex-row">
-            {posts.map((post) => (
-                <Link href={`/posts/${post.id}`} key={post.id}>
-                    {post.title}
-                </Link>
-            ))}
+            <div className="flex flex-row my-4">
+                {loadingElement}
+                {createElement}
+                {posts.map((post) => (
+                    <Card
+                        key={post.id}
+                        image="https://u.cubeupload.com/mfaizudd/mh014byfaizuddde8rdx.jpg"
+                        category="Some category"
+                        title={post.title}
+                        description={post.content ?? ""}
+                        route="/posts"
+                    />
+                ))}
             </div>
             <div className="text-center">
                 <Link href="/">Back</Link>
