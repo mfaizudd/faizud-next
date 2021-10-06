@@ -28,7 +28,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
 }
 
-const Posts: React.FC<PostsProps> = ({posts}) => {
+const Posts: NextPage<PostsProps> = ({posts}) => {
     const [session, loading] = useSession();
     let loadingElement = null;
     let createElement = null;
