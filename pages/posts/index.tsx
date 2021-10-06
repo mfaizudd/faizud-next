@@ -50,7 +50,7 @@ const Posts: NextPage<PostsProps> = ({posts}) => {
     }
     return (
         <Layout title="Posts">
-            <div className="flex flex-row my-4">
+            <div className="flex flex-wrap gap-2 my-4 justify-evenly">
                 {loadingElement}
                 {createElement}
                 {posts.map((post) => (
