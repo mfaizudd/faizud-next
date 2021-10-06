@@ -57,7 +57,7 @@ const Posts: NextPage<PostsProps> = ({posts}) => {
                     <Card
                         key={post.id}
                         image="https://u.cubeupload.com/mfaizudd/mh014byfaizuddde8rdx.jpg"
-                        category="Some category"
+                        category="Blog Post"
                         title={post.title}
                         description={post.content ?? ""}
                         route="/posts"
