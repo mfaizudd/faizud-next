@@ -28,10 +28,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
 }
 
-const Posts: NextPage<PostsProps> = ({posts}) => {
+const Posts: React.FC<PostsProps> = ({posts}) => {
     const [session, loading] = useSession();
-    let loadingElement = <></>;
-    let createElement = <></>;
+    let loadingElement = null;
+    let createElement = null;
     if (loading) {
         loadingElement = (
             <div className="mx-auto">
