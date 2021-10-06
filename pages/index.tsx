@@ -37,10 +37,10 @@ const Home: NextPage<PostsProps> = ({posts}) => {
             <p className="text-center">
                 {"Muhammad Faizud Daroin's personal website"}
             </p>
-            <div className="flex flex-row">
-                <div className="w-7/12">
+            <div className="flex lg:flex-row my-5 flex-col items-center">
+                <div className="w-full lg:w-7/12">
                 </div>
-                <div className="w-5/12">
+                <div className="w-full lg:w-5/12 md:mx-auto">
                     {posts.map(post => (
                         <Card
                             key={post.id}
