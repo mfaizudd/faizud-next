@@ -66,7 +66,7 @@ const Drafts: NextPage<DraftsProps> = ({posts}) => {
                         category="Blog Post"
                         title={post.title}
                         description={post.content ?? ""}
-                        route="/posts"
+                        route={`/posts/${post.id}`}
                     />
                 ))}
             </div>
