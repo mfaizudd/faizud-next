@@ -1,4 +1,4 @@
-
+import Error from 'next/error';
 import type { NextPage } from 'next'
 import Link from 'next/link';
 import Layout from 'components/Layout'
@@ -49,8 +49,13 @@ const Drafts: NextPage<DraftsProps> = ({posts}) => {
             />
         )
     }
+    else {
+        return (
+            <Error statusCode={401} title="Unauthorized"/>
+        )
+    }
     return (
-        <Layout title="Posts">
+        <Layout title="Drafts">
             <div className="flex flex-row my-4">
                 {loadingElement}
                 {createElement}
