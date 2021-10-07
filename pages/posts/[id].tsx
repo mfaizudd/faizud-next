@@ -4,7 +4,10 @@ import { GetServerSideProps } from 'next';
 import prisma from 'lib/prisma'
 import Router from 'next/router';
 import ReactMarkdown from 'react-markdown';
+import rehypeHighlight from 'rehype-highlight';
+import CodeBlock from 'components/CodeBlock';
 import { useSession } from 'next-auth/client';
+import { Heading1, Heading2, Heading3 } from 'components/Headings';
 
 interface PostProps {
     post: Post & { author: { name: string | null} }
@@ -40,8 +43,15 @@ const Show: React.FC<PostProps> = (props) => {
         <Layout>
             <div className="max-w-3xl mx-auto lg:w-3/4">
                 <h1 className="ml-3 text-4xl">{props.post.title}</h1>
-                <p>By {props.post.author.name}</p>
-                <ReactMarkdown>
+                <sub className="text-gray-600 w-full inline-block text-right">By {props.post.author.name}</sub>
+                <hr/>
+                <br/>
+                <ReactMarkdown plugins={[rehypeHighlight]} components={{
+                    code: CodeBlock,
+                    h1: Heading1,
+                    h2: Heading2,
+                    h3: Heading3
+                }}>
                     {props.post.content ?? ""}
                 </ReactMarkdown>
             </div>
