@@ -5,6 +5,7 @@ import InputText from "components/InputText";
 import Router from "next/router";
 import Submit from "components/Submit";
 import TextArea from "components/TextArea";
+import Link from 'next/link';
 
 const Draft: React.FC = () => {
     const [title, setTitle] = useState('');
@@ -27,11 +28,15 @@ const Draft: React.FC = () => {
 
     return (
         <Layout>
+            <h1 className="mx-5 text-4xl font-bold">New Draft</h1>
             <Form onSubmit={onSubmit} method="post">
                 <InputText value={title} onChange={e=>setTitle(e.target.value)} name="title"/>
                 <TextArea value={content} onChange={e=>setContent(e.target.value)} name="content"/>
                 <div className="px-3 my-3">
                     <Submit label="Create"/>
+                    <Link href="/posts">
+                        <a>or Cancel</a>
+                    </Link>
                 </div>
             </Form>
         </Layout>
