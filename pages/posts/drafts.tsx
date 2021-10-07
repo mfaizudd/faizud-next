@@ -1,4 +1,4 @@
-
+import Error from 'next/error';
 import type { NextPage } from 'next'
 import Link from 'next/link';
 import Layout from 'components/Layout'
@@ -49,6 +49,11 @@ const Drafts: NextPage<DraftsProps> = ({posts}) => {
             />
         )
     }
+    else {
+        return (
+            <Error statusCode={401} title="Unauthorized"/>
+        )
+    }
     return (
         <Layout title="Posts">
             <div className="flex flex-wrap gap-2 my-4 justify-evenly">
@@ -61,7 +66,7 @@ const Drafts: NextPage<DraftsProps> = ({posts}) => {
                         category="Blog Post"
                         title={post.title}
                         description={post.content ?? ""}
-                        route="/posts"
+                        route={`/posts/${post.id}`}
                     />
                 ))}
             </div>
