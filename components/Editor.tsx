@@ -1,13 +1,28 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { CodeJar } from "codejar";
-import hljs from "highlight.js";
+import Prism from "prismjs";
+import loadLanguages from "prismjs/components/"
+loadLanguages(["markdown"]);
 
-const Editor: React.FC = () => {
+interface EditorProps {
+    value: string;
+    onChange: (value: string) => void
+}
+
+const Editor: React.FC<EditorProps> = ({value, onChange}) => {
     let editor = useRef<HTMLDivElement>(null);
-    if (editor != null) {
-        // TODO: Change highlight.js to Prism
-        // let jar = CodeJar(editor.current as HTMLDivElement, hljs.highlight)
-    }
+    useEffect(() => {
+        if (editor != null) {
+            const highlight = (editor: HTMLElement) => {
+                let code = editor.textContent;
+                code = Prism.highlight(code ?? "", Prism.languages.markdown, "markdown");
+                editor.innerHTML = code;
+            }
+            let jar = CodeJar(editor.current as HTMLDivElement, highlight);
+            jar.updateCode(value);
+            jar.onUpdate(onChange);
+        }
+    });
     return (
         <div ref={editor}></div>
     )
