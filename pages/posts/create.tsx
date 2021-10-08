@@ -6,6 +6,11 @@ import Router from "next/router";
 import Submit from "components/Submit";
 import TextArea from "components/TextArea";
 import Link from 'next/link';
+import { CodeJar } from 'codejar';
+import hljs from "highlight.js";
+
+import "ace-builds/src-min-noconflict/mode-markdown";
+import "ace-builds/src-min-noconflict/theme-github";
 
 const Draft: React.FC = () => {
     const [title, setTitle] = useState('');
@@ -31,7 +36,10 @@ const Draft: React.FC = () => {
             <h1 className="mx-5 text-4xl font-bold">New Draft</h1>
             <Form onSubmit={onSubmit} method="post">
                 <InputText value={title} onChange={e=>setTitle(e.target.value)} name="title"/>
-                <TextArea value={content} onChange={e=>setContent(e.target.value)} name="content"/>
+                <TextArea 
+                    name="content"
+                    value={content} 
+                    onChange={e=>setContent(e.target.value)} />
                 <div className="px-3 my-3">
                     <Submit label="Create"/>
                     <Link href="/posts">
