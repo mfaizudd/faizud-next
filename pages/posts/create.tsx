@@ -35,7 +35,7 @@ const Draft: React.FC = () => {
                 <div className="px-3 my-3">
                     <Submit label="Create"/>
                     <Link href="/posts">
-                        <a>or Cancel</a>
+                        <a> or Cancel</a>
                     </Link>
                 </div>
             </Form>
