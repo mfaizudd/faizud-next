@@ -6,9 +6,13 @@ import Router from "next/router";
 import Submit from "components/Submit";
 import TextArea from "components/TextArea";
 import Link from 'next/link';
-import Editor from "components/Editor";
-// import dynamic from "next/dynamic";
-// const Editor = dynamic(() => import('components/Editor'), {ssr: false});
+// import Editor from "components/Editor";
+import dynamic from "next/dynamic";
+const Editor = dynamic(() => import('components/Editor'), {ssr: false});
+// const MDEditor = dynamic(
+//   () => import("@uiw/react-md-editor").then((mod) => mod.default),
+//   { ssr: false }
+// );
 
 const Draft: React.FC = () => {
     const [title, setTitle] = useState('');
@@ -37,7 +41,7 @@ const Draft: React.FC = () => {
                 {(typeof window !== undefined) && (
                 <Editor 
                     value={content} 
-                    onChange={v=>setContent(v)} />
+                    onChange={setContent} />
                 )}
                 <div className="px-3 my-3">
                     <Submit label="Create"/>
