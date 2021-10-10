@@ -41,7 +41,7 @@ const Show: React.FC<PostProps> = (props) => {
     }
     return (
         <Layout>
-            <div className="max-w-3xl mx-auto lg:w-3/4">
+            <div className="max-w-3xl mx-auto my-4 lg:w-3/4">
                 <h1 className="ml-3 text-4xl">{props.post.title}</h1>
                 <sub className="text-gray-600 w-full inline-block text-right">By {props.post.author.name}</sub>
                 <hr/>
