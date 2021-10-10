@@ -46,7 +46,7 @@ const Show: React.FC<PostProps> = (props) => {
                 <sub className="text-gray-600 w-full inline-block text-right">By {props.post.author.name}</sub>
                 <hr/>
                 <br/>
-                <ReactMarkdown plugins={[rehypeHighlight]} components={{
+                <ReactMarkdown className="space-y-5 text-justify" plugins={[rehypeHighlight]} components={{
                     code: CodeBlock,
                     h1: Heading1,
                     h2: Heading2,
