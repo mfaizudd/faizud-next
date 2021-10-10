@@ -1,10 +1,9 @@
 /** @type {import('next').NextConfig} */
-const withTM = require("next-transpile-modules")(["@uiw/react-md-editor", "rehype"]);
-module.exports = withTM({
+module.exports = {
   reactStrictMode: true,
   images: {
     domains: [
       "u.cubeupload.com"
     ]
   },
-})
+}
