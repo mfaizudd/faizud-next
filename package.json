@@ -14,6 +14,7 @@
     "babel-plugin-prismjs": "^2.1.0",
     "codejar": "^3.5.0",
     "esm": "^3.2.25",
+    "feather-icons": "^4.28.0",
     "next": "11.1.2",
     "next-auth": "^3.29.0",
     "next-transpile-modules": "^8.0.0",
@@ -28,6 +29,7 @@
     "superjson": "^1.7.5"
   },
   "devDependencies": {
+    "@types/feather-icons": "^4.7.0",
     "@types/node": "^16.10.2",
     "@types/prismjs": "^1.16.6",
     "@types/react": "17.0.25",
