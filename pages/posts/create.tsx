@@ -4,7 +4,6 @@ import Form from "components/Form";
 import InputText from "components/InputText";
 import Router from "next/router";
 import Submit from "components/Submit";
-import TextArea from "components/TextArea";
 import Link from 'next/link';
 import dynamic from "next/dynamic";
 import rehypeHighlight from 'rehype-highlight';
