@@ -8,7 +8,7 @@ const CodeBlock: CodeComponent = ({ className, children, inline }) => {
     const match = /language-(\w+)/.exec(className ?? "");
     const lang = match ? match[1] : "auto";
     let block = (
-        <SyntaxHighlighter language={lang} style={atomDark} showLineNumbers={true}>
+        <SyntaxHighlighter language={lang} style={atomDark} >
             {children}
         </SyntaxHighlighter>
     );
