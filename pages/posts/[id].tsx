@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import CodeBlock from 'components/CodeBlock';
 import { useSession } from 'next-auth/client';
-import feather from 'feather-icons';
+import { CheckCircle } from 'react-feather';
 import { Heading1, Heading2, Heading3 } from 'components/Headings';
 
 interface PostProps {
@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     };
 }
 
-const Show: React.FC<PostProps> = (props) => {
+const Show: React.FC<PostProps> = ({post}) => {
     const publishPost = async (id: number) => {
         await fetch(`/api/posts/${id}/publish`, {
             method: 'PUT',
@@ -43,8 +43,8 @@ const Show: React.FC<PostProps> = (props) => {
     return (
         <Layout>
             <div className="max-w-3xl mx-auto my-4 lg:w-3/4">
-                <h1 className="ml-3 text-4xl">{props.post.title}</h1>
-                <sub className="text-gray-600 w-full inline-block text-right">By {props.post.author.name}</sub>
+                <h1 className="ml-3 text-4xl">{post.title}</h1>
+                <sub className="text-gray-600 w-full inline-block text-right">By {post.author.name}</sub>
                 <hr/>
                 <br/>
                 <ReactMarkdown className="space-y-5 text-justify" plugins={[rehypeHighlight]} components={{
@@ -53,23 +53,10 @@ const Show: React.FC<PostProps> = (props) => {
                     h2: Heading2,
                     h3: Heading3
                 }}>
-                    {props.post.content ?? ""}
+                    {post.content ?? ""}
                 </ReactMarkdown>
-                <div className="absolute rounded-full bg-green-900">
-                    <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="24" 
-                        height="24" 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        strokeWidth="2" 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        className="feather feather-check-circle">
-
-                        {feather.icons["check-circle"]}
-                    </svg>
+                <div className="absolute rounded-full bg-gray-800 right-4 bottom-4 p-3" onClick={e => publishPost(post.id)}>
+                    <CheckCircle className="text-white"/>
                 </div>
             </div>
         </Layout>
