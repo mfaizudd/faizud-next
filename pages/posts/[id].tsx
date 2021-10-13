@@ -55,7 +55,7 @@ const Show: React.FC<PostProps> = ({post}) => {
                 }}>
                     {post.content ?? ""}
                 </ReactMarkdown>
-                <div className="absolute rounded-full bg-gray-800 right-4 bottom-4 p-3" onClick={e => publishPost(post.id)}>
+                <div className="fixed rounded-full bg-gray-800 right-4 bottom-4 p-3 cursor-pointer" onClick={e => publishPost(post.id)}>
                     <CheckCircle className="text-white"/>
                 </div>
             </div>
