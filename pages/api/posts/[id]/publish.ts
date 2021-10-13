@@ -20,3 +20,5 @@ const Publish: NextApiHandler = async (req, res) => {
             break;
     }
 }
+
+export default Publish;
