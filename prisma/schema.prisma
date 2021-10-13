@@ -16,7 +16,7 @@ model Post {
     updatedAt     DateTime @updatedAt
     title         String   @db.VarChar
     content       String?
-    featuredImage String
+    featuredImage String?
     published     Boolean  @default(false)
     author        User     @relation(fields: [authorId], references: [id])
     authorId      Int
