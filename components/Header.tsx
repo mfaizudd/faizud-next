@@ -21,8 +21,10 @@ const Header: React.FC = () => {
     if (session) {
         popupItems = (
             <MiniPopup hidden={popupHidden} >
-                <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-0">Your Profile</a>
-                <a onClick={_=>signOut()} href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-1">Sign out</a>
+                <Link href="/posts/drafts">
+                    <a className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-0">Drafts</a>
+                </Link>
+                <a onClick={_ => signOut()} href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex={-1} id="user-menu-item-1">Sign out</a>
             </MiniPopup>
         )
         // Enable edit buttons and stuff
