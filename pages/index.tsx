@@ -18,6 +18,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                 select: { name: true }
             }
         },
+        take: 3
     });
     return {
         props: {
@@ -28,7 +29,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
 
 const Home: NextPage<PostsProps> = ({posts}) => {
-    const date = new Date().getFullYear().toString();
     return (
         <Layout title="Index">
             <h1 className="text-4xl mx-auto text-center">

@@ -3,7 +3,7 @@ import Toast from "components/Toast"
 
 interface FloatingButtonProps {
     title: string;
-    onClick: React.MouseEventHandler<HTMLDivElement> | undefined;
+    onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
 }
 
 const FloatingButton: React.FC<FloatingButtonProps> = (props) => {
