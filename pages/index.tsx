@@ -4,6 +4,7 @@ import Layout from 'components/Layout';
 import Card from 'components/Card';
 import { Post } from '@prisma/client';
 import prisma from 'lib/prisma';
+import PostList from 'components/PostList';
 interface PostsProps {
     posts: Post[];
 }
@@ -40,17 +41,8 @@ const Home: NextPage<PostsProps> = ({posts}) => {
             <div className="flex lg:flex-row m-5 flex-col items-center">
                 <div className="w-full lg:w-7/12">
                 </div>
-                <div className="w-full lg:w-5/12 md:mx-auto">
-                    {posts.map(post => (
-                        <Card
-                            key={post.id}
-                            image="https://u.cubeupload.com/mfaizudd/mh014byfaizuddde8rdx.jpg"
-                            category="Some category"
-                            title={post.title}
-                            description={post.content ?? ""}
-                            route="/posts"
-                        />
-                    ))}
+                <div className="w-full lg:w-5/12 md:mx-auto flex flex-col gap-2">
+                    <PostList posts={posts} />
                 </div>
             </div>
         </Layout>

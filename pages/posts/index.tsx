@@ -6,15 +6,16 @@ import { GetStaticProps } from 'next';
 import Card from 'components/Card';
 import { Post } from '.prisma/client';
 import { useSession } from 'next-auth/client';
+import PostList from 'components/PostList';
 
 interface PostsProps {
     posts: Post[];
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-    
+
     const posts = await prisma.post.findMany({
-        where: {published: true},
+        where: { published: true },
         include: {
             author: {
                 select: { name: true }
@@ -28,7 +29,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
 }
 
-const Posts: NextPage<PostsProps> = ({posts}) => {
+const Posts: NextPage<PostsProps> = ({ posts }) => {
     const [session, loading] = useSession();
     let loadingElement = null;
     let createElement = null;
@@ -50,19 +51,10 @@ const Posts: NextPage<PostsProps> = ({posts}) => {
     }
     return (
         <Layout title="Posts">
-            <div className="flex flex-wrap gap-2 my-4 justify-evenly">
+            <div className="flex flex-col gap-2 my-4 justify-evenly flex-grow">
                 {loadingElement}
                 {createElement}
-                {posts.map((post) => (
-                    <Card
-                        key={post.id}
-                        image="https://u.cubeupload.com/mfaizudd/mh014byfaizuddde8rdx.jpg"
-                        category="Blog Post"
-                        title={post.title}
-                        description={post.content ?? ""}
-                        route="/posts"
-                    />
-                ))}
+                <PostList posts={posts} />
             </div>
             <div className="text-center">
                 <Link href="/">Back</Link>
