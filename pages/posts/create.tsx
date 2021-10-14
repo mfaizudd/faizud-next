@@ -19,6 +19,7 @@ const MdEditor = dynamic(() => import('react-markdown-editor-lite'), {
 const Draft: React.FC = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [featuredImage, setFeaturedImage] = useState('');
 
     const onSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
@@ -50,7 +51,8 @@ const Draft: React.FC = () => {
         <Layout>
             <h1 className="mx-5 text-4xl font-bold">New Draft</h1>
             <Form onSubmit={onSubmit} method="post">
-                <InputText value={title} onChange={e => setTitle(e.target.value)} name="title" />
+                <InputText value={title} onChange={e => setTitle(e.target.value)} name="Title" />
+                <InputText value={featuredImage} onChange={e => setFeaturedImage(e.target.value)} name="Featured Image" />
                 <div className="px-3 my-3 w-full">
                     <MdEditor
                         style={{ height: '500px' }}

@@ -13,7 +13,7 @@ const PostList: React.FC<PostListProps> = ({ posts }) => {
                 posts.map((post) => (
                     <Card
                         key={post.id}
-                        image="https://u.cubeupload.com/mfaizudd/mh014byfaizuddde8rdx.jpg"
+                        image={post?.featuredImage}
                         category="Blog Post"
                         title={post.title}
                         description={post.content ?? ""}
