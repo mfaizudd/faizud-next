@@ -74,7 +74,7 @@ const Posts: NextPage<PostsProps> = (props) => {
 
     return (
         <Layout title="Posts">
-            <div className="flex flex-col gap-2 my-4 justify-evenly flex-grow">
+            <div className="flex flex-col gap-2 m-4 justify-evenly flex-grow">
                 {loadingElement}
                 <PostList posts={posts} />
                 {loadingPost && loadingElement}
