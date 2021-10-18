@@ -8,7 +8,7 @@ import rehypeHighlight from 'rehype-highlight';
 import CodeBlock from 'components/CodeBlock';
 import Error from 'next/error';
 import { useSession } from 'next-auth/client';
-import { Check } from 'react-feather';
+import { Check, Trash } from 'react-feather';
 import { Heading1, Heading2, Heading3 } from 'components/Headings';
 import FloatingButton from 'components/FloatingButton';
 
@@ -51,6 +51,14 @@ const Show: React.FC<PostProps> = ({ post }) => {
         });
         await Router.push('/posts');
     }
+    
+    // TODO: Add confirmation before deleting
+    const deletePost = async (id: number) => {
+        await fetch(`/api/posts/${id}/delete`, {
+            method: 'DELETE',
+        });
+        await Router.push('/posts');
+    }
 
     return (
         <Layout>
@@ -69,8 +77,13 @@ const Show: React.FC<PostProps> = ({ post }) => {
                 </ReactMarkdown>
                 <div className="fixed bottom-5 right-5 flex flex-row">
                     {loggedIn && unpublished && owned && (
-                        <FloatingButton onClick={_e => publishPost(post.id)} title="Publish">
+                        <FloatingButton onClick={() => publishPost(post.id)} title="Publish">
                             <Check className="text-white" />
+                        </FloatingButton>
+                    )}
+                    {loggedIn && owned && (
+                        <FloatingButton onClick={() => deletePost(post.id)} title="Delete">
+                            <Trash className="text-white" />
                         </FloatingButton>
                     )}
                 </div>
