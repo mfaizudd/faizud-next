@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.4.1",
     "@prisma/client": "^3.1.1",
     "@types/react-syntax-highlighter": "^13.5.2",
     "babel-plugin-prismjs": "^2.1.0",
