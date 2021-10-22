@@ -1,14 +1,34 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, useState } from "react";
 
+export enum ConfirmType {
+    Danger,
+    Success,
+    Neutral
+}
+
 interface ConfirmProps {
+    confirmType?: ConfirmType;
     isOpen: boolean;
     onConfirm: () => void;
     onCancel: () => void;
     onClose: () => void;
 }
 
-const Confirm: React.FC<ConfirmProps> = ({ isOpen, onConfirm, onCancel, onClose }) => {
+const Confirm: React.FC<ConfirmProps> = ({ confirmType, isOpen, onConfirm, onCancel, onClose }) => {
+    let typeClass = "text-gray-900 bg-gray-100 hover:bg-gray-200"
+    switch (confirmType) {
+        case ConfirmType.Danger:
+            typeClass = "text-red-900 bg-red-100 hover:bg-red-200"
+            break;
+
+        case ConfirmType.Success:
+            typeClass = "text-green-900 bg-green-100 hover:bg-green-200"
+    
+        default:
+            break;
+    }
+
     const onButtonConfirmClick = () => {
         onConfirm();
     }
@@ -68,7 +88,7 @@ const Confirm: React.FC<ConfirmProps> = ({ isOpen, onConfirm, onCancel, onClose 
                             <div className="mt-4 gap-2 flex">
                                 <button
                                     type="button"
-                                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                                    className={`inline-flex justify-center px-4 py-2 text-sm font-medium ${typeClass} border border-transparent rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500`}
                                     onClick={() => onButtonConfirmClick()}
                                 >
                                     Yes

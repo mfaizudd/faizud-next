@@ -13,7 +13,7 @@ import { Heading1, Heading2, Heading3 } from 'components/Headings';
 import FloatingButton from 'components/FloatingButton';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-import Confirm from 'components/Confirm';
+import Confirm, { ConfirmType } from 'components/Confirm';
 
 interface PostProps {
     post: Post & { author: User }
@@ -95,6 +95,7 @@ const Show: React.FC<PostProps> = ({ post }) => {
                 </div>
             </div>
             <Confirm 
+                confirmType={ConfirmType.Danger}
                 isOpen={isConfirming} 
                 onConfirm={() => deletePost(post.id)}
                 onCancel={() => setIsConfirming(false)}
