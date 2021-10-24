@@ -1,24 +1,22 @@
-import { Post, User } from ".prisma/client";
+import { Category, Post, User } from ".prisma/client";
 import Card from "./Card"
 import { useSession } from "next-auth/client"
 import { Session } from "next-auth";
+import { PostItem } from "types/PostItem";
 
 interface PostCardProps {
-    post: Post & { author: User }
+    post: PostItem
     session?: Session | null;
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post, session }) => {
     const loggedIn = Boolean(session);
     const unpublished = post.published === false;
-    const owned = session?.user?.email === post.author.email;
-    console.log(session);
-    console.log(loggedIn);
-    console.log(owned);
+    const owned = session?.user?.email === post?.author?.email;
     return (
         <Card
             image={post?.featuredImage}
-            category="Blog Post"
+            category={post?.category?.name ?? "Uncategorized"}
             title={post.title}
             description={post.content ?? ""}
             route={`/posts/${post.id}`}

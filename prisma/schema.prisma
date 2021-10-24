@@ -11,15 +11,17 @@ generator client {
 }
 
 model Post {
-    id            Int      @id @default(autoincrement())
-    createdAt     DateTime @default(now())
-    updatedAt     DateTime @updatedAt
-    title         String   @db.VarChar
+    id            Int       @id @default(autoincrement())
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
+    title         String    @db.VarChar
     content       String?
     featuredImage String?
-    published     Boolean  @default(false)
-    author        User     @relation(fields: [authorId], references: [id])
+    published     Boolean   @default(false)
+    author        User      @relation(fields: [authorId], references: [id])
     authorId      Int
+    category      Category? @relation(fields: [categoryId], references: [id])
+    categoryId    Int?
 }
 
 model Profile {
@@ -73,6 +75,15 @@ model Session {
     updatedAt    DateTime @default(now()) @map(name: "updated_at")
 
     @@map(name: "sessions")
+}
+
+model Category {
+    id         Int        @id @default(autoincrement())
+    name       String
+    parent     Category?  @relation("category", fields: [categoryId], references: [id])
+    categoryId Int?
+    children   Category[] @relation("category")
+    posts      Post[]
 }
 
 enum Role {

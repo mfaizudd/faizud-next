@@ -8,9 +8,10 @@ import Card from 'components/Card';
 import { Post } from '.prisma/client';
 import { useSession } from 'next-auth/client';
 import PostList from 'components/PostList';
+import { PostItem } from 'types/PostItem';
 
 interface DraftsProps {
-    posts: Post[];
+    posts: PostItem[];
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -20,7 +21,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         include: {
             author: {
                 select: { name: true }
-            }
+            },
+            category: true
         },
     });
     return {

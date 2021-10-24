@@ -4,7 +4,7 @@ import Layout from 'components/Layout'
 import prisma from 'lib/prisma';
 import { GetStaticProps } from 'next';
 import Card from 'components/Card';
-import { Post, User } from '.prisma/client';
+import { Category, Post, User } from '.prisma/client';
 import { getSession, useSession } from 'next-auth/client';
 import PostList from 'components/PostList';
 import { useState } from 'react';
@@ -12,10 +12,10 @@ import FloatingButton from 'components/FloatingButton';
 import { FilePlus } from 'react-feather';
 import { Session } from 'next-auth';
 
-type PostWithAuthor = Post & { author: User }
+type PostItem = Post & { author: User, category: Category }
 
 interface PostsProps {
-    posts: PostWithAuthor[];
+    posts: PostItem[];
     session?: Session | null
 }
 
@@ -26,7 +26,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         include: {
             author: {
                 select: { name: true, email: true }
-            }
+            },
+            category: true
         },
         orderBy: { createdAt: "desc" },
         take: 3
