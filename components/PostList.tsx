@@ -1,24 +1,22 @@
-import { Post } from ".prisma/client";
+import { Post, User } from ".prisma/client";
+import { Session } from "next-auth";
 import React from "react";
 import Card from "./Card";
+import PostCard from "./PostCard";
+
+type PostWithAuthor = Post & { author: User }
 
 interface PostListProps {
-    posts: Post[]
+    posts: PostWithAuthor[],
+    session?: Session | null
 }
 
-const PostList: React.FC<PostListProps> = ({ posts }) => {
+const PostList: React.FC<PostListProps> = ({ posts, session }) => {
     return (
         <>
             {
                 posts.map((post) => (
-                    <Card
-                        key={post.id}
-                        image={post?.featuredImage}
-                        category="Blog Post"
-                        title={post.title}
-                        description={post.content ?? ""}
-                        route={`/posts/${post.id}`}
-                    />
+                    <PostCard key={post.id} post={post} session={session}/>
                 ))
             }
         </>

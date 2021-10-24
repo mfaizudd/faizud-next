@@ -25,6 +25,7 @@ const Card: React.FC<CardProps> = (props) => {
                     </Link>
                 </div>
             </div>
+            {props.children}
         </div>
     )
 }

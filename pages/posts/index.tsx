@@ -1,50 +1,57 @@
-import type { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import Link from 'next/link';
 import Layout from 'components/Layout'
 import prisma from 'lib/prisma';
 import { GetStaticProps } from 'next';
 import Card from 'components/Card';
-import { Post } from '.prisma/client';
-import { useSession } from 'next-auth/client';
+import { Post, User } from '.prisma/client';
+import { getSession, useSession } from 'next-auth/client';
 import PostList from 'components/PostList';
 import { useState } from 'react';
 import FloatingButton from 'components/FloatingButton';
 import { FilePlus } from 'react-feather';
+import { Session } from 'next-auth';
+
+type PostWithAuthor = Post & { author: User }
 
 interface PostsProps {
-    posts: Post[];
+    posts: PostWithAuthor[];
+    session?: Session | null
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const posts = await prisma.post.findMany({
         where: { published: true },
         include: {
             author: {
-                select: { name: true }
+                select: { name: true, email: true }
             }
         },
         orderBy: { createdAt: "desc" },
         take: 3
     });
+    const session = await getSession(context);
     return {
         props: {
-            posts
+            posts,
+            session
         }
     }
 }
 
 const Posts: NextPage<PostsProps> = (props) => {
-    const [session, loading] = useSession();
+    const session  = props.session;
     let loadingElement = null;
     let createElement = null;
-    if (loading) {
-        loadingElement = (
-            <div className="mx-auto">
-                Loading...
-            </div>
-        )
-    }
+    // if (loading) {
+    //     loadingElement = (
+    //         <div className="mx-auto">
+    //             Loading...
+    //         </div>
+    //     )
+    // }
+    console.log(session);
     if (session) {
         createElement = (
             <Link href="/posts/create" passHref>
@@ -76,7 +83,7 @@ const Posts: NextPage<PostsProps> = (props) => {
         <Layout title="Posts">
             <div className="flex flex-col gap-2 m-4 justify-evenly flex-grow">
                 {loadingElement}
-                <PostList posts={posts} />
+                <PostList posts={posts} session={session} />
                 {loadingPost && loadingElement}
             </div>
             {createElement}
