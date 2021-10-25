@@ -33,7 +33,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         orderBy: { createdAt: "desc" },
         take: 3
     });
-    const totalPost = await prisma.post.count();
+    const totalPost = await prisma.post.count({
+        where: { published: true }
+    });
     const session = await getSession(context);
     return {
         props: {
