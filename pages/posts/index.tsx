@@ -87,7 +87,7 @@ const Posts: NextPage<PostsProps> = (props) => {
         <Layout title="Posts">
             <div className="flex flex-col gap-2 m-4 justify-evenly flex-grow">
                 {loadingElement}
-                <PostList posts={posts} session={session} />
+                <PostList posts={posts} />
                 {loadingPost && loadingElement}
             </div>
             {createElement}

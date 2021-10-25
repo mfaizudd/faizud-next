@@ -7,15 +7,14 @@ import PostCard from "./PostCard";
 
 interface PostListProps {
     posts: PostItem[],
-    session?: Session | null
 }
 
-const PostList: React.FC<PostListProps> = ({ posts, session }) => {
+const PostList: React.FC<PostListProps> = ({ posts }) => {
     return (
         <>
             {
                 posts.map((post) => (
-                    <PostCard key={post.id} post={post} session={session}/>
+                    <PostCard key={post.id} post={post} />
                 ))
             }
         </>

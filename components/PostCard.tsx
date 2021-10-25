@@ -6,10 +6,10 @@ import { PostItem } from "types/PostItem";
 
 interface PostCardProps {
     post: PostItem
-    session?: Session | null;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post, session }) => {
+const PostCard: React.FC<PostCardProps> = ({ post }) => {
+    const [session] = useSession();
     const loggedIn = Boolean(session);
     const unpublished = post.published === false;
     const owned = session?.user?.email === post?.author?.email;
@@ -29,7 +29,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, session }) => {
                                 Edit
                             </div>
                         </a>
-                        {!unpublished && (
+                        {unpublished && (
                             <a href="#">
                                 <div className="rounded-lg bg-gray-800 text-white p-3">
                                     Publish
