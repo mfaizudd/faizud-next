@@ -17,7 +17,6 @@ type PostItem = Post & { author: User, category: Category }
 interface PostsProps {
     posts: PostItem[];
     totalPost: number;
-    session?: Session | null
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -36,27 +35,25 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const totalPost = await prisma.post.count({
         where: { published: true }
     });
-    const session = await getSession(context);
     return {
         props: {
             posts,
-            session,
             totalPost
         }
     }
 }
 
 const Posts: NextPage<PostsProps> = (props) => {
-    const session  = props.session;
+    const [session, loading] = useSession();
     let loadingElement = null;
     let createElement = null;
-    // if (loading) {
-    //     loadingElement = (
-    //         <div className="mx-auto">
-    //             Loading...
-    //         </div>
-    //     )
-    // }
+    if (loading) {
+        loadingElement = (
+            <div className="mx-auto">
+                Loading...
+            </div>
+        )
+    }
     console.log(session);
     if (session) {
         createElement = (
