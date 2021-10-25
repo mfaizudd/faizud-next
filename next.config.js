@@ -3,7 +3,8 @@ module.exports = {
   reactStrictMode: true,
   images: {
     domains: [
-      "u.cubeupload.com"
+      "u.cubeupload.com",
+      "avatars.githubusercontent.com"
     ]
   },
 }

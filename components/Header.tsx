@@ -77,7 +77,7 @@ const Header: React.FC = () => {
                                     <button type="button" className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                                         <span className="sr-only">Open user menu</span>
                                         <div onClick={e => setPopupHidden(!popupHidden)} className="h-8 w-8 rounded-full">
-                                            <Image src="/favicon.ico" layout="fill" alt="" />
+                                            <Image className="rounded-full" src={session?.user?.image ?? "/favicon.ico"} layout="fill" alt="" />
                                         </div>
                                     </button>
                                 </div>
