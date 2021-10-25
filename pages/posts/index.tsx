@@ -16,6 +16,7 @@ type PostItem = Post & { author: User, category: Category }
 
 interface PostsProps {
     posts: PostItem[];
+    totalPost: number;
     session?: Session | null
 }
 
@@ -32,11 +33,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         orderBy: { createdAt: "desc" },
         take: 3
     });
+    const totalPost = await prisma.post.count();
     const session = await getSession(context);
     return {
         props: {
             posts,
-            session
+            session,
+            totalPost
         }
     }
 }
@@ -67,7 +70,7 @@ const Posts: NextPage<PostsProps> = (props) => {
 
     const [posts, setPosts] = useState(props.posts)
     const [loadingPost, setLoadingPost] = useState(false);
-    const [hasMore, setHasMore] = useState(true);
+    const [hasMore, setHasMore] = useState(posts.length < props.totalPost);
     const getMorePosts = async () => {
         setLoadingPost(true);
         const response = await fetch(`/api/posts?take=3&skip=${posts.length}&published=true`, {
