@@ -1,69 +1,103 @@
-import Error from 'next/error';
-import type { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import Link from 'next/link';
 import Layout from 'components/Layout'
 import prisma from 'lib/prisma';
 import { GetStaticProps } from 'next';
 import Card from 'components/Card';
-import { Post } from '.prisma/client';
-import { useSession } from 'next-auth/client';
+import { Category, Post, User } from '.prisma/client';
+import { getSession, useSession } from 'next-auth/client';
 import PostList from 'components/PostList';
-import { PostItem } from 'types/PostItem';
+import { useState } from 'react';
+import FloatingButton from 'components/FloatingButton';
+import { FilePlus } from 'react-feather';
+import { Session } from 'next-auth';
 
-interface DraftsProps {
+type PostItem = Post & { author: User, category: Category }
+
+interface PostsProps {
     posts: PostItem[];
+    totalPost: number;
+    session?: Session | null
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-    
+export const getServerSideProps: GetServerSideProps = async (context) => {
+
     const posts = await prisma.post.findMany({
-        where: {published: false},
+        where: { published: false },
         include: {
             author: {
-                select: { name: true }
+                select: { name: true, email: true }
             },
             category: true
         },
+        orderBy: { createdAt: "desc" },
+        take: 3
     });
+    const totalPost = await prisma.post.count({
+        where: { published: false }
+    });
+    const session = await getSession(context);
     return {
         props: {
-            posts
+            posts,
+            session,
+            totalPost
         }
     }
 }
 
-const Drafts: NextPage<DraftsProps> = ({posts}) => {
-    const [session, loading] = useSession();
+const Posts: NextPage<PostsProps> = (props) => {
+    const session  = props.session;
     let loadingElement = null;
     let createElement = null;
-    if (loading) {
-        loadingElement = (
-            <div className="mx-auto">
-                Loading...
-            </div>
-        )
-    }
+    // if (loading) {
+    //     loadingElement = (
+    //         <div className="mx-auto">
+    //             Loading...
+    //         </div>
+    //     )
+    // }
+    console.log(session);
     if (session) {
         createElement = (
-            <Card
-                title="Create"
-                description="Create new post"
-                route="/posts/create"
-            />
+            <Link href="/posts/create" passHref>
+                <div className="fixed right-5 bottom-5">
+                    <FloatingButton title="Create">
+                        <FilePlus className="text-white" />
+                    </FloatingButton>
+                </div>
+            </Link>
         )
     }
-    else {
-        return (
-            <Error statusCode={401} title="Unauthorized"/>
-        )
+
+    const [posts, setPosts] = useState(props.posts)
+    const [loadingPost, setLoadingPost] = useState(false);
+    const [hasMore, setHasMore] = useState(posts.length < props.totalPost);
+    const getMorePosts = async () => {
+        setLoadingPost(true);
+        const response = await fetch(`/api/posts?take=3&skip=${posts.length}&published=true`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await response.json();
+        setPosts([...posts, ...data.posts]);
+        setHasMore(posts.length+data.posts.length < data.total);
+        setLoadingPost(false);
     }
+
     return (
         <Layout title="Posts">
-            <div className="flex flex-col gap-4 my-4 justify-evenly flex-grow-0">
+            <div className="flex flex-col gap-2 m-4 justify-evenly flex-grow">
                 {loadingElement}
-                {createElement}
                 <PostList posts={posts} />
+                {loadingPost && loadingElement}
             </div>
+            {createElement}
+            {hasMore && (
+                <div className="text-center text-white bg-blue-500 rounded-lg p-2 cursor-pointer m-2" onClick={getMorePosts}>
+                    More Posts
+                </div>
+            )}
             <div className="text-center">
                 <Link href="/">Back</Link>
             </div>
@@ -71,4 +105,4 @@ const Drafts: NextPage<DraftsProps> = ({posts}) => {
     )
 }
 
-export default Drafts;
+export default Posts;
