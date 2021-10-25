@@ -11,8 +11,7 @@ import { useSession } from 'next-auth/client';
 import { Check, Trash } from 'react-feather';
 import { Heading1, Heading2, Heading3 } from 'components/Headings';
 import FloatingButton from 'components/FloatingButton';
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import Confirm, { ConfirmType } from 'components/Confirm';
 
 interface PostProps {

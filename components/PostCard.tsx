@@ -1,8 +1,9 @@
 import { Category, Post, User } from ".prisma/client";
 import Card from "./Card"
 import { useSession } from "next-auth/client"
-import { Session } from "next-auth";
+import Link from "next/link";
 import { PostItem } from "types/PostItem";
+import Router from "next/router";
 
 interface PostCardProps {
     post: PostItem
@@ -13,6 +14,14 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
     const loggedIn = Boolean(session);
     const unpublished = post.published === false;
     const owned = session?.user?.email === post?.author?.email;
+
+    const publishPost = async (id: number) => {
+        await fetch(`/api/posts/${id}/publish`, {
+            method: 'PUT',
+        });
+        await Router.push('/posts');
+    }
+
     return (
         <Card
             image={post?.featuredImage}
@@ -24,13 +33,15 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
             {session && loggedIn && owned && (
                 <div className="relative right-0">
                     <div className="absolute right-0 bottom-0 m-2 flex flex-column gap-2">
-                        <a href="#">
-                            <div className="rounded-lg bg-gray-800 text-white p-3">
-                                Edit
-                            </div>
-                        </a>
+                        <Link href={`/posts/${post.id}/edit`}>
+                            <a>
+                                <div className="rounded-lg bg-gray-800 text-white p-3">
+                                    Edit
+                                </div>
+                            </a>
+                        </Link>
                         {unpublished && (
-                            <a href="#">
+                            <a href="#" onClick={() => publishPost(post.id)}>
                                 <div className="rounded-lg bg-gray-800 text-white p-3">
                                     Publish
                                 </div>
