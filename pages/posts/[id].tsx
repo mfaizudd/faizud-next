@@ -11,7 +11,7 @@ import { useSession } from 'next-auth/client';
 import { Check, Trash } from 'react-feather';
 import { Heading1, Heading2, Heading3 } from 'components/Headings';
 import FloatingButton from 'components/FloatingButton';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import Confirm, { ConfirmType } from 'components/Confirm';
 
 interface PostProps {
@@ -94,6 +94,8 @@ const Show: React.FC<PostProps> = ({ post }) => {
                 </div>
             </div>
             <Confirm 
+                title="Confirm Delete"
+                desc="Are you sure you want to delete"
                 confirmType={ConfirmType.Danger}
                 isOpen={isConfirming} 
                 onConfirm={() => deletePost(post.id)}

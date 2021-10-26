@@ -6,20 +6,23 @@ import { PostItem } from "types/PostItem";
 import Router from "next/router";
 
 interface PostCardProps {
-    post: PostItem
+    post: PostItem;
+    onPublish?: (post: Post) => void;
+    onDelete?: (post: Post) => void;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post }) => {
+const PostCard: React.FC<PostCardProps> = ({ post, onPublish, onDelete }) => {
     const [session] = useSession();
     const loggedIn = Boolean(session);
     const unpublished = post.published === false;
     const owned = session?.user?.email === post?.author?.email;
-
-    const publishPost = async (id: number) => {
-        await fetch(`/api/posts/${id}/publish`, {
-            method: 'PUT',
-        });
-        await Router.push('/posts');
+    const publish = (post: Post) => {
+        if (onPublish)
+            onPublish(post);
+    }
+    const deletePost = (post: Post) => {
+        if (onDelete)
+            onDelete(post);
     }
 
     return (
@@ -41,13 +44,13 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
                             </a>
                         </Link>
                         {unpublished && (
-                            <a href="#" onClick={() => publishPost(post.id)}>
+                            <a href="#" onClick={() => publish(post)}>
                                 <div className="rounded-lg bg-gray-800 text-white p-3">
                                     Publish
                                 </div>
                             </a>
                         )}
-                        <a href="#">
+                        <a href="#" onClick={() => deletePost(post)}>
                             <div className="rounded-lg bg-gray-800 text-white p-3">
                                 Delete
                             </div>

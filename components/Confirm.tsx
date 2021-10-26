@@ -8,6 +8,8 @@ export enum ConfirmType {
 }
 
 interface ConfirmProps {
+    title: string;
+    desc: string;
     confirmType?: ConfirmType;
     isOpen: boolean;
     onConfirm: () => void;
@@ -15,7 +17,15 @@ interface ConfirmProps {
     onClose: () => void;
 }
 
-const Confirm: React.FC<ConfirmProps> = ({ confirmType, isOpen, onConfirm, onCancel, onClose }) => {
+const Confirm: React.FC<ConfirmProps> = ({ 
+    title,
+    desc,
+    confirmType, 
+    isOpen, 
+    onConfirm, 
+    onCancel, 
+    onClose 
+}) => {
     let typeClass = "text-gray-900 bg-gray-100 hover:bg-gray-200"
     switch (confirmType) {
         case ConfirmType.Danger:
@@ -77,11 +87,11 @@ const Confirm: React.FC<ConfirmProps> = ({ confirmType, isOpen, onConfirm, onCan
                                 as="h3"
                                 className="text-lg font-medium leading-6 text-gray-900"
                             >
-                                Confirm Delete
+                                {title}
                             </Dialog.Title>
                             <div className="mt-2">
                                 <p className="text-sm text-gray-500">
-                                    Are you sure you want to delete this post?
+                                    {desc}
                                 </p>
                             </div>
 

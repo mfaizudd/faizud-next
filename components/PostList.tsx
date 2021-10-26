@@ -6,15 +6,21 @@ import Card from "./Card";
 import PostCard from "./PostCard";
 
 interface PostListProps {
-    posts: PostItem[],
+    posts: PostItem[];
+    onPublish?: (post: Post) => void;
+    onDelete?: (post: Post) => void;
 }
 
-const PostList: React.FC<PostListProps> = ({ posts }) => {
+const PostList: React.FC<PostListProps> = ({ posts, onPublish, onDelete }) => {
     return (
         <>
             {
                 posts.map((post) => (
-                    <PostCard key={post.id} post={post} />
+                    <PostCard 
+                        key={post.id} 
+                        post={post}
+                        onPublish={onPublish}
+                        onDelete={onDelete} />
                 ))
             }
         </>
