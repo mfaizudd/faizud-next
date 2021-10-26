@@ -11,7 +11,6 @@ import { Session } from 'next-auth';
 type PostWithAuthor = Post & { author: User }
 interface PostsProps {
     posts: PostWithAuthor[];
-    session?: Session | null
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -36,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 
-const Home: NextPage<PostsProps> = ({posts, session}) => {
+const Home: NextPage<PostsProps> = ({posts}) => {
     return (
         <Layout title="Index">
             <h1 className="text-4xl mx-auto text-center">
@@ -50,7 +49,7 @@ const Home: NextPage<PostsProps> = ({posts, session}) => {
                 <div className="w-full lg:w-7/12">
                 </div>
                 <div className="w-full lg:w-5/12 md:mx-auto flex flex-col gap-2">
-                    <PostList posts={posts} session={session} />
+                    <PostList posts={posts} />
                 </div>
             </div>
         </Layout>
