@@ -23,7 +23,7 @@ const Post: NextApiHandler = async (req, res) => {
         case 'GET':
             const { take, skip, published } = query;
             const posts = await prisma.post.findMany({
-                where: { published: Boolean(published) },
+                where: { published: published==="true" },
                 include: {
                     author: {
                         select: { name: true }
@@ -33,7 +33,7 @@ const Post: NextApiHandler = async (req, res) => {
                 take: Number(take),
                 skip: Number(skip)
             });
-            const total = await prisma.post.count({where: {published: Boolean(published)}});
+            const total = await prisma.post.count({where: {published: published==="true"}});
             res.status(200).json({posts, total});
             break;
 
