@@ -12,7 +12,7 @@ const Publish: NextApiHandler = async (req, res) => {
         where: { id: Number(id) },
         include: { author: true }
     });
-    if (session?.user?.email !== post?.author?.email) {
+    if (!session || session?.user?.email !== post?.author?.email) {
         res.status(401);
         return;
     }
