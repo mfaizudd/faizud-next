@@ -15,9 +15,6 @@ const deletePost: NextApiHandler = async (req, res) => {
     if (!session || session?.user?.email !== post?.author.email) {
         res.status(401).end("You don't have permission to delete this post");
         return;
-        // throw new Error (
-        //     `You don't have permission to delete this post`
-        // )
     }
     if (method === "DELETE") {
         const post = await prisma.post.delete({
