@@ -39,12 +39,6 @@ const Confirm: React.FC<ConfirmProps> = ({
             break;
     }
 
-    const onButtonConfirmClick = () => {
-        onConfirm();
-    }
-    const onButtonCancelClick = () => {
-        onCancel();
-    }
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog
@@ -99,14 +93,14 @@ const Confirm: React.FC<ConfirmProps> = ({
                                 <button
                                     type="button"
                                     className={`inline-flex justify-center px-4 py-2 text-sm font-medium ${typeClass} border border-transparent rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500`}
-                                    onClick={() => onButtonConfirmClick()}
+                                    onClick={() => onConfirm()}
                                 >
                                     Yes
                                 </button>
                                 <button
                                     type="button"
                                     className="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-900 bg-gray-100 border border-transparent rounded-md hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                                    onClick={() => onButtonCancelClick()}
+                                    onClick={() => onCancel()}
                                 >
                                     Cancel
                                 </button>

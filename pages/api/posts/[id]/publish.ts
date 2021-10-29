@@ -22,7 +22,7 @@ const Publish: NextApiHandler = async (req, res) => {
                 where: { id: Number(id) },
                 data: { published: true }
             });
-            res.json(post);
+            res.status(200).json(post);
             break;
     
         default:
