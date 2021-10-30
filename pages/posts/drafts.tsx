@@ -13,6 +13,7 @@ import { FilePlus } from 'react-feather';
 import { Session } from 'next-auth';
 import Confirm, { ConfirmType } from 'components/Confirm';
 import Router from 'next/router';
+import axios from 'axios';
 
 type PostItem = Post & { author: User, category: Category }
 
@@ -71,7 +72,7 @@ const Posts: NextPage<PostsProps> = (props) => {
     const [posts, setPosts] = useState(props.posts)
 
     // selected post to delete/publish
-    const [post, setPost] = useState<Post|null>(null)
+    const [post, setPost] = useState<Post | null>(null)
     const [loadingPost, setLoadingPost] = useState(false);
     const [hasMore, setHasMore] = useState(posts.length < props.totalPost);
     const [isConfirmDelete, setIsConfirmDelete] = useState(false);
@@ -90,38 +91,55 @@ const Posts: NextPage<PostsProps> = (props) => {
     const deletePost = async (id?: number) => {
         if (!id) return;
 
-        await fetch(`/api/posts/${id}/delete`, {
-            method: 'DELETE',
-        });
-        await Router.push('/posts/drafts');
+        try {
+            const response = await axios.delete(`/api/posts/${id}/delete`);
+            if (response.status === 200) {
+                // TODO: Refresh posts
+            }
+        } catch (error: any) {
+            console.log(error.response.data)
+        }
     }
 
     const publish = async (id?: number) => {
         if (!id) return;
 
-        await fetch(`/api/posts/${id}/publish`, {
-            method: 'PUT',
-        });
-        await Router.push('/posts/drafts');
+        try {
+            const response = await axios.put(`/api/posts/${id}/publish`);
+            if (response.status === 200) {
+                // TODO: Refresh posts
+            }
+        } catch (error: any) {
+            console.error(error.response.data);
+        }
     }
 
     const getMorePosts = async () => {
         setLoadingPost(true);
-        const response = await fetch(`/api/posts?take=3&skip=${posts.length}&published=true`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        });
-        const data = await response.json();
-        setPosts([...posts, ...data.posts]);
-        setHasMore(posts.length+data.posts.length < data.total);
+        try {
+            const response = await axios.get(`/api/posts?take=3&skip=${posts.length}&published=true`, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (response.status === 200) {
+                const data = response.data;
+                setPosts([...posts, ...data.posts]);
+                setHasMore(posts.length + data.posts.length < data.total);
+            }
+        } catch (error: any) {
+            console.error(error.response.data);
+        }
         setLoadingPost(false);
     }
+
+    // TODO: Create a refresh function
+    // Take the current posts count
+    // Reload posts with that same posts count
 
     return (
         <Layout title="Posts">
             <div className="flex flex-col gap-2 m-4 justify-evenly flex-grow">
                 {loadingElement}
-                <PostList 
+                <PostList
                     posts={posts}
                     onDelete={onDelete}
                     onPublish={onPublish} />
@@ -136,24 +154,24 @@ const Posts: NextPage<PostsProps> = (props) => {
             <div className="text-center">
                 <Link href="/">Back</Link>
             </div>
-            <Confirm 
+            <Confirm
                 title="Confirm delete"
                 desc="Are you sure you want to delete this post?"
                 confirmType={ConfirmType.Danger}
-                isOpen={isConfirmDelete} 
+                isOpen={isConfirmDelete}
                 onConfirm={() => deletePost(post?.id)}
                 onCancel={() => setIsConfirmDelete(false)}
                 onClose={() => setIsConfirmDelete(false)}
-                />
-            <Confirm 
+            />
+            <Confirm
                 title="Confirm publish"
                 desc="Are you sure you want to publish this post?"
                 confirmType={ConfirmType.Success}
-                isOpen={isConfirmPublish} 
+                isOpen={isConfirmPublish}
                 onConfirm={() => publish(post?.id)}
                 onCancel={() => setIsConfirmPublish(false)}
                 onClose={() => setIsConfirmPublish(false)}
-                />
+            />
         </Layout>
     )
 }

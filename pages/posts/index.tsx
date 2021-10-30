@@ -91,22 +91,27 @@ const Posts: NextPage<PostsProps> = (props) => {
     const deletePost = async (id?: number) => {
         if (!id) return;
 
-        await fetch(`/api/posts/${id}/delete`, {
-            method: 'DELETE',
-        });
-        await Router.push('/posts');
+        try {
+            const response = await axios.delete(`/api/posts/${id}/delete`);
+            if (response.status === 200) {
+                // Refresh posts
+            }
+        } catch (error: any) {
+            console.error(error.response.data);
+        }
     }
 
     const publish = async (id?: number) => {
-        console.log(id);
-        console.log(!id);
         if (!id) return;
-        console.log('Published');
 
-        await fetch(`/api/posts/${id}/publish`, {
-            method: 'PUT',
-        });
-        await Router.push('/posts');
+        try {
+            const response = await axios.put(`/api/posts/${id}/publish`);
+            if (response.status === 200) {
+                // TODO: Refresh posts
+            }
+        } catch (error: any) {
+            console.error(error.response.data);
+        }
     }
 
     const getMorePosts = async () => {
@@ -121,7 +126,7 @@ const Posts: NextPage<PostsProps> = (props) => {
                 setHasMore(posts.length + data.posts.length < data.total);
             }
         } catch (error: any) {
-            console.log(error.response.data.error);
+            console.error(error.response.data);
         }
         setLoadingPost(false);
     }
