@@ -7,21 +7,23 @@ interface FloatingButtonProps {
 }
 
 const FloatingButton: React.FC<FloatingButtonProps> = (props) => {
-    const initialToastClass = "-top-3/4 opacity-0 invisible"
+    const initialToastClass = "top-1 opacity-0 invisible"
     let [toastClass, setToastClass] = useState(initialToastClass);
     const onMouseEnter: React.MouseEventHandler = (e) => {
-        setToastClass("-top-full");
+        setToastClass("top-0");
     }
     const onMouseLeave = () => {
         setToastClass(initialToastClass);
     }
     return (
         <div onClick={props.onClick}>
-            <Toast className={`absolute ${toastClass} -left-1/4 transition-all`}>
-                {props.title}
-            </Toast>
             <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className="rounded-full bg-gray-800 p-3 cursor-pointer">
                 {props.children}
+            </div>
+            <div className="absolute origin-top -top-full">
+                <Toast className={`relative ${toastClass} -left-3 transition-all mb-1`}>
+                    {props.title}
+                </Toast>
             </div>
         </div>
     )
