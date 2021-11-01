@@ -80,7 +80,7 @@ const Show: React.FC<PostProps> = ({ post }) => {
                 }}>
                     {post.content ?? ""}
                 </ReactMarkdown>
-                <div className="fixed bottom-5 right-5 flex flex-row">
+                <div className="fixed bottom-5 right-5 flex flex-row gap-2">
                     {loggedIn && unpublished && owned && (
                         <FloatingButton onClick={() => publishPost(post.id)} title="Publish">
                             <Check className="text-white" />
