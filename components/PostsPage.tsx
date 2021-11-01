@@ -8,6 +8,7 @@ import FloatingButton from "components/FloatingButton";
 import { FilePlus } from "react-feather"
 import PostList from "./PostList";
 import Layout from "./Layout";
+import Loading from "./Loading";
 
 type PostItem = Post & { author: User, category: Category }
 
@@ -23,9 +24,7 @@ const PostsPage: React.FC<PostsProps> = (props) => {
     let createElement = null;
     if (loading) {
         loadingElement = (
-            <div className="mx-auto">
-                Loading...
-            </div>
+            <Loading />
         )
     }
     if (session) {
