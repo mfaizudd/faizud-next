@@ -4,15 +4,16 @@ import { useSession } from "next-auth/client"
 import Link from "next/link";
 import { PostItem } from "types/PostItem";
 import Router from "next/router";
+import { Session } from "next-auth";
 
 interface PostCardProps {
     post: PostItem;
+    session: Session | null;
     onPublish?: (post: Post) => void;
     onDelete?: (post: Post) => void;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post, onPublish, onDelete }) => {
-    const [session] = useSession();
+const PostCard: React.FC<PostCardProps> = ({ post, session, onPublish, onDelete }) => {
     const loggedIn = Boolean(session);
     const unpublished = post.published === false;
     const owned = session?.user?.email === post?.author?.email;
