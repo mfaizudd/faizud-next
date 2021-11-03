@@ -15,7 +15,7 @@ const Card: React.FC<CardProps> = (props) => {
             <div className="md:flex h-full">
                 <div className="md:flex-shrink-0">
                     <div className="h-48 w-full object-cover md:h-full md:w-48 relative">
-                        <Image src={props.image ?? "/enbandeng.png"} layout="fill" objectFit="cover" alt="Man looking at item at a store" />
+                        <Image src={props.image || "/enbandeng.png"} layout="fill" objectFit="cover" alt="Man looking at item at a store" />
                     </div>
                 </div>
                 <div className="p-8 py-16">
