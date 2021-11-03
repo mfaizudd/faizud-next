@@ -14,7 +14,8 @@ import { Heading1, Heading2, Heading3 } from "components/Headings";
 import { GetServerSideProps } from "next";
 import prisma from "lib/prisma";
 import { Category } from ".prisma/client";
-import Select from "react-select";
+import ComboBox from "components/ComboBox";
+import axios from "axios";
 
 const MdEditor = dynamic(() => import('react-markdown-editor-lite'), {
     ssr: false,
@@ -35,18 +36,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const Create: React.FC<CreateProps> = ({ categories }) => {
     const [title, setTitle] = useState('');
+    const [categoryId, setCategoryId] = useState<number>();
     const [content, setContent] = useState('');
     const [featuredImage, setFeaturedImage] = useState('');
 
     const onSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         try {
-            const body = { title, content }
-            await fetch('/api/posts', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            });
+            const data = { title, categoryId, featuredImage, content }
+            await axios.post('/api/posts', data);
             await Router.push('/posts/drafts');
         } catch (error) {
             console.error(error);
@@ -76,7 +74,7 @@ const Create: React.FC<CreateProps> = ({ categories }) => {
             <h1 className="mx-5 text-4xl font-bold">New Draft</h1>
             <Form onSubmit={onSubmit} method="post">
                 <InputText value={title} onChange={e => setTitle(e.target.value)} name="Title" />
-                <Select options={options} />
+                <ComboBox value={categoryId} onChange={item => setCategoryId(item.value)} name="Category" options={options} />
                 <InputText value={featuredImage} onChange={e => setFeaturedImage(e.target.value)} name="Featured Image" />
                 <div className="px-3 my-3 w-full">
                     <MdEditor

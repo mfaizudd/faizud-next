@@ -10,11 +10,13 @@ const Post: NextApiHandler = async (req, res) => {
     } = req;
     switch (method) {
         case 'POST':
-            const { title, content } = body;
+            const { title, categoryId, featuredImage, content } = body;
             const session = await getSession({ req });
             const result = await prisma.post.create({
                 data: {
                     title,
+                    category: { connect: {id: categoryId} },
+                    featuredImage,
                     content,
                     author: { connect: { email: session?.user?.email as string | undefined } }
                 }
