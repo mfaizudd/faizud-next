@@ -2,13 +2,13 @@ import { Post, User, Category } from ".prisma/client";
 import axios, { AxiosResponse } from "axios";
 import { useSession } from "next-auth/client";
 import React, { useState } from "react";
-import Confirm, { ConfirmType } from "./Confirm";
+import Confirm, { ConfirmType } from "components/Confirm";
 import Link from "next/link";
 import FloatingButton from "components/FloatingButton";
 import { FilePlus } from "react-feather"
-import PostList from "./PostList";
-import Layout from "./Layout";
-import Loading from "./Loading";
+import PostList from "components/Post/PostList";
+import Layout from "components/Layout";
+import Loading from "components/Loading";
 
 type PostItem = Post & { author: User, category: Category }
 

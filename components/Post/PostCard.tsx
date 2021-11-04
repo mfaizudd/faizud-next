@@ -1,9 +1,7 @@
-import { Category, Post, User } from ".prisma/client";
-import Card from "./Card"
-import { useSession } from "next-auth/client"
+import { Post } from ".prisma/client";
+import Card from "../Card"
 import Link from "next/link";
 import { PostItem } from "types/PostItem";
-import Router from "next/router";
 import { Session } from "next-auth";
 
 interface PostCardProps {
