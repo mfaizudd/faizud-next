@@ -1,4 +1,4 @@
-import { Category } from "@prisma/client";
+import { Category, Post } from "@prisma/client";
 import CodeBlock from "components/CodeBlock";
 import ComboBox from "components/ComboBox";
 import Form from "components/Form";
@@ -8,7 +8,7 @@ import Layout from "components/Layout";
 import Submit from "components/Submit";
 import dynamic from "next/dynamic";
 import React, { useState } from "react";
-import { Link } from "react-feather";
+import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 
@@ -17,22 +17,23 @@ const MdEditor = dynamic(() => import('react-markdown-editor-lite'), {
 });
 
 interface PostFormProps {
+    post?: Post;
     categories: Category[];
     onSubmit: (data: PostData) => void;
 }
 
 interface PostData {
     title: string;
-    categoryId: number|undefined;
+    categoryId: number | undefined;
     content: string;
     featuredImage: string;
 }
 
-const PostForm: React.FC<PostFormProps> = ({ categories, onSubmit }) => {
-    const [title, setTitle] = useState('');
-    const [categoryId, setCategoryId] = useState<number>();
-    const [content, setContent] = useState('');
-    const [featuredImage, setFeaturedImage] = useState('');
+const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
+    const [title, setTitle] = useState(post?.title ?? "");
+    const [categoryId, setCategoryId] = useState(post?.categoryId ?? -1);
+    const [content, setContent] = useState(post?.content ?? "");
+    const [featuredImage, setFeaturedImage] = useState(post?.featuredImage ?? "");
 
     const render = (text: string) => {
         return (
@@ -47,9 +48,13 @@ const PostForm: React.FC<PostFormProps> = ({ categories, onSubmit }) => {
 
     const submit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
-        onSubmit({title, categoryId, content, featuredImage});
+        onSubmit({
+            title,
+            categoryId,
+            content,
+            featuredImage
+        });
     }
-
 
     const options = categories.map(v => {
         return {
@@ -58,19 +63,21 @@ const PostForm: React.FC<PostFormProps> = ({ categories, onSubmit }) => {
         }
     });
 
+    options.splice(0, 0, { value: -1, label: "Uncategorized" })
+
     return (
         <Layout>
             <h1 className="mx-5 text-4xl font-bold">New Draft</h1>
             <Form onSubmit={submit} method="post">
                 <InputText value={title} onChange={e => setTitle(e.target.value)} name="Title" />
-                <ComboBox value={categoryId} onChange={item => setCategoryId(item.value)} name="Category" options={options} />
+                <ComboBox value={options.find(o => o.value === categoryId)} onChange={item => setCategoryId(item.value)} name="Category" options={options} />
                 <InputText value={featuredImage} onChange={e => setFeaturedImage(e.target.value)} name="Featured Image" />
                 <div className="px-3 my-3 w-full">
                     <MdEditor
                         style={{ height: '500px' }}
                         renderHTML={text => render(text)}
                         value={content}
-                        onChange={({text}) => setContent(text)}
+                        onChange={({ text }) => setContent(text)}
                     />
                 </div>
                 <div className="px-3 my-3">

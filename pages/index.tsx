@@ -4,7 +4,7 @@ import Layout from 'components/Layout';
 import Card from 'components/Card';
 import { Post, User } from '@prisma/client';
 import prisma from 'lib/prisma';
-import PostList from 'components/PostList';
+import PostList from 'components/Post/PostList';
 import { getSession } from 'next-auth/client';
 import { Session } from 'next-auth';
 
