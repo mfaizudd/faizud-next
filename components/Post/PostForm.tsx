@@ -81,7 +81,7 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
                     />
                 </div>
                 <div className="px-3 my-3">
-                    <Submit label="Create" />
+                    <Submit label="Submit" />
                     <Link href="/posts">
                         <a> or Cancel</a>
                     </Link>

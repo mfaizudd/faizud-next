@@ -9,7 +9,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = (props) => {
     const date = new Date().getFullYear().toString();
     return (
-        <div className="flex flex-col h-screen justify-between">
+        <div className="flex flex-col justify-between">
             <Head>
                 <title>{props.title && `${props.title} | `}Faizud.Net</title>
                 <meta name="description" content="Muhammad Faizud Daroin's personal website" />
