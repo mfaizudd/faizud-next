@@ -25,11 +25,12 @@ const Post: NextApiHandler = async (req, res) => {
             res.status(200).json({ posts, total });
             break;
         case 'POST': {
-            const { title, categoryId, featuredImage, content } = body;
+            const { title, slug, categoryId, featuredImage, content } = body;
             const session = await getSession({ req });
             const result = await prisma.post.create({
                 data: {
                     title,
+                    slug,
                     category: { connect: { id: categoryId } },
                     featuredImage,
                     content,

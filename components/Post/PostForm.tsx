@@ -31,6 +31,7 @@ interface PostData {
 
 const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
     const [title, setTitle] = useState(post?.title ?? "");
+    const [slug, setSlug] = useState(post?.slug ?? "");
     const [categoryId, setCategoryId] = useState(post?.categoryId ?? -1);
     const [content, setContent] = useState(post?.content ?? "");
     const [featuredImage, setFeaturedImage] = useState(post?.featuredImage ?? "");
@@ -70,6 +71,7 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
             <h1 className="mx-5 text-4xl font-bold">New Draft</h1>
             <Form onSubmit={submit} method="post">
                 <InputText value={title} onChange={e => setTitle(e.target.value)} name="Title" />
+                <InputText value={slug} onChange={e => setSlug(e.target.value)} name="Slug" />
                 <ComboBox value={options.find(o => o.value === categoryId)} onChange={item => setCategoryId(item.value)} name="Category" options={options} />
                 <InputText value={featuredImage} onChange={e => setFeaturedImage(e.target.value)} name="Featured Image" />
                 <div className="px-3 my-3 w-full">

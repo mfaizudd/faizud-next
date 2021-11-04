@@ -10,7 +10,7 @@ import PostForm from "components/Post/PostForm";
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const categories = await prisma.category.findMany();
     const post = await prisma.post.findUnique({
-        where: { id: Number(context.params?.id) }
+        where: { slug: String(context?.params?.slug) }
     })
     return {
         props: {

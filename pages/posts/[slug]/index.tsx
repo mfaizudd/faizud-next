@@ -21,7 +21,7 @@ interface PostProps {
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     const post = await prisma.post.findUnique({
         where: {
-            id: Number(params?.id) || -1
+            slug: String(params?.slug)
         },
         include: {
             author: true
