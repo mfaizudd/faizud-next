@@ -20,7 +20,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         include: {
             author: {
                 select: { name: true, email: true }
-            }
+            },
+            category: true
         },
         take: 3
     });

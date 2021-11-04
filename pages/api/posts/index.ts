@@ -14,7 +14,8 @@ const Post: NextApiHandler = async (req, res) => {
             const posts = await prisma.post.findMany({
                 where: { published: published === "true" },
                 include: {
-                    author: true
+                    author: true,
+                    category: true
                 },
                 orderBy: { createdAt: "desc" },
                 take: Number(take),
