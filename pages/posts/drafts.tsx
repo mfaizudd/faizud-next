@@ -1,7 +1,7 @@
 import type { GetServerSideProps, NextPage } from 'next'
 import prisma from 'lib/prisma';
 import { Category, Post, User } from '.prisma/client';
-import PostsPage from 'components/PostsPage';
+import PostsPage from 'components/Post/PostsPage';
 
 type PostItem = Post & { author: User, category: Category }
 
