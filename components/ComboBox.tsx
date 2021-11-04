@@ -15,6 +15,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({ name, value, onChange, options }) =
                 {name}
             </label>
             <Select
+                instanceId={name}
                 value={value}
                 onChange={onChange}
                 options={options} />
