@@ -30,7 +30,8 @@
     "react-syntax-highlighter": "^15.4.4",
     "refactor": "^0.0.3",
     "rehype-highlight": "^5.0.0",
-    "superjson": "^1.7.5"
+    "superjson": "^1.7.5",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/feather-icons": "^4.7.0",

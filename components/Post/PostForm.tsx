@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
+import * as yup from "yup";
 
 const MdEditor = dynamic(() => import('react-markdown-editor-lite'), {
     ssr: false,
@@ -37,6 +38,13 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
     const [content, setContent] = useState(post?.content ?? "");
     const [featuredImage, setFeaturedImage] = useState(post?.featuredImage ?? "");
 
+    let schema = yup.object().shape({
+        title: yup.string().required(),
+        slug: yup.string().required(),
+        content: yup.string().required()
+    });
+
+
     const render = (text: string) => {
         return (
             <ReactMarkdown plugins={[rehypeHighlight]} components={{
@@ -50,13 +58,19 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
 
     const submit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
-        onSubmit({
+        const data = {
             title,
             slug,
             categoryId,
             content,
             featuredImage
-        });
+        }
+        try {
+            const result = await schema.validate(data);
+            onSubmit(data);
+        } catch (error) {
+            
+        }
     }
 
     const options = categories.map(v => {
