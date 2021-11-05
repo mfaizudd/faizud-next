@@ -30,7 +30,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, session, onPublish, onDelete 
             category={post?.category?.name ?? "Uncategorized"}
             title={post.title}
             description={post.content ?? ""}
-            route={`/posts/${post.id}`}
+            route={`/posts/${post.slug}`}
         >
             {session && loggedIn && owned && (
                 <div className="relative right-0">

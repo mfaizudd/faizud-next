@@ -24,6 +24,7 @@ interface PostFormProps {
 
 interface PostData {
     title: string;
+    slug: string;
     categoryId: number | undefined;
     content: string;
     featuredImage: string;
@@ -51,6 +52,7 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
         e.preventDefault();
         onSubmit({
             title,
+            slug,
             categoryId,
             content,
             featuredImage
