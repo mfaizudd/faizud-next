@@ -11,7 +11,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
-import * as yup from "yup";
+import Joi, { string } from "joi";
 
 const MdEditor = dynamic(() => import('react-markdown-editor-lite'), {
     ssr: false,
@@ -37,11 +37,14 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
     const [categoryId, setCategoryId] = useState(post?.categoryId ?? -1);
     const [content, setContent] = useState(post?.content ?? "");
     const [featuredImage, setFeaturedImage] = useState(post?.featuredImage ?? "");
+    const [errors, setErrors] = useState<{key: string, message: string}[]>();
 
-    let schema = yup.object().shape({
-        title: yup.string().required(),
-        slug: yup.string().required(),
-        content: yup.string().required()
+    let schema = Joi.object({
+        title: Joi.string().required(),
+        slug: Joi.string().required(),
+        categoryId: Joi.number(),
+        content: Joi.string().required(),
+        featuredImage: Joi.string().allow("")
     });
 
 
@@ -66,10 +69,19 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
             featuredImage
         }
         try {
-            const result = await schema.validate(data);
+            await schema.validateAsync(data, { abortEarly: false });
             onSubmit(data);
-        } catch (error) {
-            
+        } catch (error: any) {
+            const errorDetails = error.details.map((item:any) => {
+                const key = item.path.join(".");
+                const message = item.message;
+                return {
+                    key,
+                    message
+                }
+            });
+            setErrors(errorDetails);
+            console.log(errorDetails);
         }
     }
 
@@ -86,7 +98,11 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
         <Layout>
             <h1 className="mx-5 text-4xl font-bold">New Draft</h1>
             <Form onSubmit={submit} method="post">
-                <InputText value={title} onChange={e => setTitle(e.target.value)} name="Title" />
+                <InputText 
+                    value={title} 
+                    onChange={e => setTitle(e.target.value)} 
+                    name="Title"
+                    errors={errors?.filter(x=>x.key=="title").map(x=>x.message)} />
                 <InputText value={slug} onChange={e => setSlug(e.target.value)} name="Slug" />
                 <ComboBox value={options.find(o => o.value === categoryId)} onChange={item => setCategoryId(item.value)} name="Category" options={options} />
                 <InputText value={featuredImage} onChange={e => setFeaturedImage(e.target.value)} name="Featured Image" />
