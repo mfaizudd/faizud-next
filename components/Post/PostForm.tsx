@@ -94,6 +94,12 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
 
     options.splice(0, 0, { value: -1, label: "Uncategorized" })
 
+    const getErrors = (field: string) => {
+        return errors
+            ?.filter(x=>x.key == field)
+            ?.map(x=>x.message);
+    }
+
     return (
         <Layout>
             <h1 className="mx-5 text-4xl font-bold">New Draft</h1>
@@ -102,10 +108,22 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
                     value={title} 
                     onChange={e => setTitle(e.target.value)} 
                     name="Title"
-                    errors={errors?.filter(x=>x.key=="title").map(x=>x.message)} />
-                <InputText value={slug} onChange={e => setSlug(e.target.value)} name="Slug" />
-                <ComboBox value={options.find(o => o.value === categoryId)} onChange={item => setCategoryId(item.value)} name="Category" options={options} />
-                <InputText value={featuredImage} onChange={e => setFeaturedImage(e.target.value)} name="Featured Image" />
+                    errors={getErrors("title")} />
+                <InputText 
+                    value={slug} 
+                    onChange={e => setSlug(e.target.value)} 
+                    name="Slug"
+                    errors={getErrors("slug")} />
+                <ComboBox 
+                    value={options.find(o => o.value === categoryId)} 
+                    onChange={item => setCategoryId(item.value)} 
+                    name="Category" options={options}
+                    errors={getErrors("categoryId")} />
+                <InputText 
+                    value={featuredImage} 
+                    onChange={e => setFeaturedImage(e.target.value)} 
+                    name="Featured Image"
+                    errors={getErrors("featuredImage")} />
                 <div className="px-3 my-3 w-full">
                     <MdEditor
                         style={{ height: '500px' }}
