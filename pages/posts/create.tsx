@@ -24,10 +24,11 @@ const Create: NextPage<CreateProps> = ({ categories }) => {
     return (
         <PostForm categories={categories} onSubmit={async data => {
             try {
-                await axios.post('/api/posts', data);
-                await Router.push('/posts/drafts');
-            } catch (error) {
-                console.error(error);
+                const response = await axios.post('/api/posts', data);
+                if (response.status === 200)
+                    await Router.push('/posts/drafts');
+            } catch (error:any) {
+                console.log(error.response);
             }
         }} />
     )

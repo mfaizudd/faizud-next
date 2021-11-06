@@ -25,19 +25,23 @@ const Post: NextApiHandler = async (req, res) => {
             res.status(200).json({ posts, total });
             break;
         case 'POST': {
-            const { title, slug, categoryId, featuredImage, content } = body;
-            const session = await getSession({ req });
-            const result = await prisma.post.create({
-                data: {
-                    title,
-                    slug,
-                    category: categoryId >=0 ? { connect: { id: categoryId } } : undefined,
-                    featuredImage,
-                    content,
-                    author: { connect: { email: session?.user?.email as string | undefined } }
-                }
-            });
-            res.json(result);
+            try {
+                const { title, slug, categoryId, featuredImage, content } = body;
+                const session = await getSession({ req });
+                const result = await prisma.post.create({
+                    data: {
+                        title,
+                        slug,
+                        category: categoryId >= 0 ? { connect: { id: categoryId } } : undefined,
+                        featuredImage,
+                        content,
+                        author: { connect: { email: session?.user?.email as string | undefined } }
+                    }
+                });
+                res.json(result);
+            } catch (error) {
+                res.status(400).json(error);
+            }
         }
 
         default:
