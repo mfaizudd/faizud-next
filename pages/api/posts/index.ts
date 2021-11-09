@@ -39,8 +39,8 @@ const Post: NextApiHandler = async (req, res) => {
                     }
                 });
                 res.json(result);
-            } catch (error) {
-                res.status(400).json(error);
+            } catch (error:any) {
+                res.status(400).json(error.message);
             }
         }
 
