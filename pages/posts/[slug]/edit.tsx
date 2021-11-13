@@ -34,7 +34,7 @@ const Edit: NextPage<EditProps> = ({ post, categories }) => {
                 try {
                     await axios.put(`/api/posts/${post.id}/update`, data);
                     await Router.push('/posts');
-                } catch (error) {
+                } catch (error:any) {
                     console.error(error);
                 }
             }} />
