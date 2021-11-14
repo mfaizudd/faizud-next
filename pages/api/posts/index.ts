@@ -26,8 +26,19 @@ const Post: NextApiHandler = async (req, res) => {
             break;
         case 'POST': {
             try {
-                const { title, slug, categoryId, featuredImage, content } = body;
+                let { title, slug, categoryId, featuredImage, content } = body;
                 const session = await getSession({ req });
+                const existingPost = await prisma.post.findFirst({
+                    where: {
+                        slug: { contains: slug }
+                    },
+                    orderBy: { slug: 'desc' }
+                });
+                if (existingPost !== null) {
+                    let lastNumber = Number(existingPost.slug.slice(slug.length));
+                    let originalSlug = existingPost.slug.slice(0, slug.length);
+                    slug = `${originalSlug}${lastNumber + 1}`
+                }
                 const result = await prisma.post.create({
                     data: {
                         title,
@@ -39,7 +50,7 @@ const Post: NextApiHandler = async (req, res) => {
                     }
                 });
                 res.json(result);
-            } catch (error:any) {
+            } catch (error: any) {
                 res.status(400).json(error.message);
             }
         }
