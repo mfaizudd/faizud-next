@@ -35,7 +35,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, session, onPublish, onDelete 
             {session && loggedIn && owned && (
                 <div className="relative right-0">
                     <div className="absolute right-0 bottom-0 m-2 flex flex-column gap-2">
-                        <Link href={`/posts/${post.id}/edit`}>
+                        <Link href={`/posts/${post.slug}/edit`}>
                             <a>
                                 <div className="rounded-lg bg-gray-800 text-white p-3">
                                     Edit
