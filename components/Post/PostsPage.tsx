@@ -153,7 +153,7 @@ const PostsPage: React.FC<PostsProps> = (props) => {
 
     return (
         <Layout title="Posts">
-            <div className="flex flex-col gap-2 mx-4 mt-28 justify-evenly flex-grow">
+            <div className="flex flex-col gap-2 mx-4 justify-evenly flex-grow">
                 {loadingElement}
                 <PostList
                     posts={posts}
