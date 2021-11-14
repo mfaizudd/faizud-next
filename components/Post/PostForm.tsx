@@ -7,7 +7,7 @@ import InputText from "components/InputText";
 import Layout from "components/Layout";
 import Submit from "components/Submit";
 import dynamic from "next/dynamic";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
@@ -47,6 +47,9 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
         featuredImage: Joi.string().allow("")
     });
 
+    useEffect(() => {
+        setSlug(title.toLocaleLowerCase().replaceAll(" ", "-"));
+    }, [title])
 
     const render = (text: string) => {
         return (
