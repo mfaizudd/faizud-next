@@ -11,7 +11,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = (props) => {
     return (
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow flex-grow">
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow min-h-0">
             <div className="md:flex h-full">
                 <div className="md:flex-shrink-0">
                     <div className="h-48 w-full object-cover md:h-full md:w-48 relative">

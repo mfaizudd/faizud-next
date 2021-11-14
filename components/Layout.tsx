@@ -18,7 +18,7 @@ const Layout: React.FC<LayoutProps> = (props) => {
 
             <Header />
 
-            <main className="container mx-auto flex flex-col">
+            <main className="container mx-auto min-h-screen p-10 flex flex-col">
 
                 { props.children }
 
