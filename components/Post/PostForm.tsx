@@ -37,7 +37,7 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
     const [categoryId, setCategoryId] = useState(post?.categoryId ?? -1);
     const [content, setContent] = useState(post?.content ?? "");
     const [featuredImage, setFeaturedImage] = useState(post?.featuredImage ?? "");
-    const [errors, setErrors] = useState<{key: string, message: string}[]>();
+    const [errors, setErrors] = useState<{ key: string, message: string }[]>();
 
     let schema = Joi.object({
         title: Joi.string().required(),
@@ -75,7 +75,7 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
             await schema.validateAsync(data, { abortEarly: false });
             onSubmit(data);
         } catch (error: any) {
-            const errorDetails = error.details.map((item:any) => {
+            const errorDetails = error.details.map((item: any) => {
                 const key = item.path.join(".");
                 const message = item.message;
                 return {
@@ -99,32 +99,32 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
 
     const getErrors = (field: string) => {
         return errors
-            ?.filter(x=>x.key == field)
-            ?.map(x=>x.message);
+            ?.filter(x => x.key == field)
+            ?.map(x => x.message);
     }
 
     return (
         <Layout>
             <h1 className="mx-5 text-4xl font-bold">New Draft</h1>
             <Form onSubmit={submit} method="post">
-                <InputText 
-                    value={title} 
-                    onChange={e => setTitle(e.target.value)} 
+                <InputText
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
                     name="Title"
                     errors={getErrors("title")} />
-                <InputText 
-                    value={slug} 
-                    onChange={e => setSlug(e.target.value)} 
+                <InputText
+                    value={slug}
+                    onChange={e => setSlug(e.target.value)}
                     name="Slug"
                     errors={getErrors("slug")} />
-                <ComboBox 
-                    value={options.find(o => o.value === categoryId)} 
-                    onChange={item => setCategoryId(item.value)} 
+                <ComboBox
+                    value={options.find(o => o.value === categoryId)}
+                    onChange={item => setCategoryId(item.value)}
                     name="Category" options={options}
                     errors={getErrors("categoryId")} />
-                <InputText 
-                    value={featuredImage} 
-                    onChange={e => setFeaturedImage(e.target.value)} 
+                <InputText
+                    value={featuredImage}
+                    onChange={e => setFeaturedImage(e.target.value)}
                     name="Featured Image"
                     errors={getErrors("featuredImage")} />
                 <div className="px-3 my-3 w-full">
@@ -134,6 +134,11 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
                         value={content}
                         onChange={({ text }) => setContent(text)}
                     />
+                    <ul className="list-disc px-3">
+                        {getErrors("content")?.map((error, index) => (
+                            <li key={index} className="text-red-500 text-xs italic list-item">{error}</li>
+                        ))}
+                    </ul>
                 </div>
                 <div className="px-3 my-3">
                     <Submit label="Submit" />
