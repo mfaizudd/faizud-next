@@ -44,7 +44,7 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
         slug: Joi.string().required(),
         categoryId: Joi.number(),
         content: Joi.string().required(),
-        featuredImage: Joi.string().allow("")
+        featuredImage: Joi.string().uri().allow("")
     });
 
     useEffect(() => {
