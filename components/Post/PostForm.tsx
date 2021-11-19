@@ -26,7 +26,7 @@ interface PostFormProps {
 interface PostData {
     title: string;
     slug: string;
-    categoryId: number | undefined;
+    categoryId: string | undefined;
     content: string;
     featuredImage: string;
 }
@@ -34,7 +34,7 @@ interface PostData {
 const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
     const [title, setTitle] = useState(post?.title ?? "");
     const [slug, setSlug] = useState(post?.slug ?? "");
-    const [categoryId, setCategoryId] = useState(post?.categoryId ?? -1);
+    const [categoryId, setCategoryId] = useState(post?.categoryId?.toString());
     const [content, setContent] = useState(post?.content ?? "");
     const [featuredImage, setFeaturedImage] = useState(post?.featuredImage ?? "");
     const [errors, setErrors] = useState<{ key: string, message: string }[]>();
@@ -42,7 +42,7 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
     let schema = Joi.object({
         title: Joi.string().required(),
         slug: Joi.string().required(),
-        categoryId: Joi.number(),
+        categoryId: Joi.string(),
         content: Joi.string().required(),
         featuredImage: Joi.string().uri().allow("")
     });
@@ -88,14 +88,17 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
         }
     }
 
-    const options = categories.map(v => {
+    const options: {
+        value?: string;
+        label: string;
+    }[] = categories.map(v => {
         return {
-            value: v.id,
+            value: v.id.toString(),
             label: v.name
         }
     });
 
-    options.splice(0, 0, { value: -1, label: "Uncategorized" })
+    options.splice(0, 0, { value: undefined, label: "Uncategorized" })
 
     const getErrors = (field: string) => {
         return errors

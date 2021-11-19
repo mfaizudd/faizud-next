@@ -1,5 +1,6 @@
 import React from "react";
 import Select, { ActionMeta, GroupBase, OptionsOrGroups } from "react-select";
+import Creatable from "react-select/creatable"
 
 interface ComboBoxProps {
     name: string;
@@ -22,7 +23,7 @@ const ComboBox: React.FC<ComboBoxProps> = (props) => {
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 {name}
             </label>
-            <Select
+            <Creatable
                 instanceId={name}
                 value={value}
                 onChange={onChange}

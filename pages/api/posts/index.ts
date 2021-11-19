@@ -43,7 +43,16 @@ const Post: NextApiHandler = async (req, res) => {
                     data: {
                         title,
                         slug,
-                        category: categoryId >= 0 ? { connect: { id: categoryId } } : undefined,
+                        category: categoryId ? {
+                            connectOrCreate: {
+                                create: {
+                                    name: categoryId
+                                },
+                                where: {
+                                    id: Number(categoryId) ? Number(categoryId) : -1
+                                }
+                            }
+                        } : undefined,
                         featuredImage,
                         content,
                         author: { connect: { email: session?.user?.email as string | undefined } }
