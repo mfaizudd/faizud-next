@@ -33,7 +33,12 @@ const Edit: NextPage<EditProps> = ({ post, categories }) => {
             onSubmit={async data => {
                 try {
                     await axios.put(`/api/posts/${post.id}/update`, data);
-                    await Router.push('/posts');
+                    if (post.published) {
+                        await Router.push('/posts');
+                    }
+                    else {
+                        await Router.push('/posts/drafts');
+                    }
                 } catch (error:any) {
                     console.error(error);
                 }
