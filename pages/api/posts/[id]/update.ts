@@ -27,7 +27,16 @@ const UpdatePost: NextApiHandler = async (req, res) => {
         data: {
             title,
             slug,
-            category: categoryId >= 0 ? { connect: { id: categoryId } } : { disconnect: true },
+            category: categoryId ? {
+                connectOrCreate: {
+                    create: {
+                        name: categoryId
+                    },
+                    where: {
+                        id: Number(categoryId) ? Number(categoryId) : -1
+                    }
+                }
+            } : undefined,
             featuredImage,
             content
         }
