@@ -12,8 +12,8 @@ interface CardProps {
 const Card: React.FC<CardProps> = (props) => {
     return (
         <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow min-h-0 w-80">
-            <div className="md:flex md:flex-row h-full">
-                <div className="h-80">
+            <div className="h-full">
+                <div className="h-80 w-full">
                     <div className="h-48 w-full object-cover md:h-full relative">
                         <Image src={props.image || "/enbandeng.png"} layout="fill" objectFit="cover" alt="Man looking at item at a store" />
                     </div>
