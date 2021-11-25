@@ -1,17 +1,17 @@
 import { Post } from ".prisma/client";
-import Card from "../Card"
+import Card from "./Card"
 import Link from "next/link";
 import { PostItem } from "types/PostItem";
 import { Session } from "next-auth";
 
-interface PostCardProps {
+interface ArtworkCardProps {
     post: PostItem;
     session: Session | null;
     onPublish?: (post: Post) => void;
     onDelete?: (post: Post) => void;
 }
 
-const ArtworkCard: React.FC<PostCardProps> = ({ post, session, onPublish, onDelete }) => {
+const ArtworkCard: React.FC<ArtworkCardProps> = ({ post, session, onPublish, onDelete }) => {
     const loggedIn = Boolean(session);
     const unpublished = post.published === false;
     const owned = session?.user?.email === post?.author?.email;

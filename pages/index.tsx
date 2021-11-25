@@ -7,6 +7,7 @@ import prisma from 'lib/prisma';
 import PostList from 'components/Post/PostList';
 import { getSession } from 'next-auth/client';
 import { Session } from 'next-auth';
+import ArtworkList from 'components/Artwork/ArtworkList';
 
 type PostWithAuthor = Post & { author: User }
 interface PostsProps {
@@ -73,10 +74,10 @@ const Home: NextPage<PostsProps> = ({ posts, artworks }) => {
                 {"Muhammad Faizud Daroin's personal website"}
             </p>
             <div className="flex lg:flex-row m-5 flex-col items-center gap-4">
-                <div className="w-full lg:w-7/12">
-                    <PostList posts={artworks} />
+                <div className="w-full lg:w-7/12 md:mx-auto flex flex-row gap-2 justify-evenly">
+                    <ArtworkList posts={artworks} />
                 </div>
-                <div className="w-full lg:w-5/12 md:mx-auto flex flex-col gap-2">
+                <div className="w-full lg:w-5/12 md:mx-auto flex flex-col gap-2 justify-evenly">
                     <PostList posts={posts} />
                 </div>
             </div>
