@@ -28,6 +28,15 @@ const Post: NextApiHandler = async (req, res) => {
             try {
                 let { title, slug, categoryId, featuredImage, content } = body;
                 const session = await getSession({ req });
+                const user = await prisma.user.findUnique({
+                    where: { 
+                        email: session?.user?.email ?? ""
+                    }
+                });
+                if (user?.role != "Admin") {
+                    res.status(401).end("Unauthorized");
+                    return;
+                }
                 const existingPost = await prisma.post.findFirst({
                     where: {
                         slug: { contains: slug }
