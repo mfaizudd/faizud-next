@@ -51,6 +51,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             },
             category: true
         },
+        orderBy: {
+            createdAt: "desc"
+        },
         take: 3
     });
 
