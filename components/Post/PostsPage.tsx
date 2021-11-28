@@ -8,7 +8,7 @@ import FloatingButton from "components/FloatingButton";
 import { FilePlus } from "react-feather"
 import PostList from "components/Post/PostList";
 import Layout from "components/Layout";
-import Loading from "components/Loading";
+import { toast } from "react-toastify";
 
 type PostItem = Post & { author: User, category: Category }
 
@@ -19,14 +19,8 @@ interface PostsProps {
 }
 
 const PostsPage: React.FC<PostsProps> = (props) => {
-    const [session, loading] = useSession();
-    let loadingElement = null;
+    const [session] = useSession();
     let createElement = null;
-    if (loading) {
-        loadingElement = (
-            <Loading />
-        )
-    }
     if (session) {
         createElement = (
             <Link href="/posts/create" passHref>
@@ -47,7 +41,6 @@ const PostsPage: React.FC<PostsProps> = (props) => {
 
     const [posts, setPosts] = useState(props.posts)
 
-    const [loadingPost, setLoadingPost] = useState(false);
     const [hasMore, setHasMore] = useState(posts.length < props.totalPost);
     const [isConfirm, setIsConfirm] = useState(false);
     const [confirmTitle, setConfirmTitle] = useState("");
@@ -121,7 +114,7 @@ const PostsPage: React.FC<PostsProps> = (props) => {
     }
 
     const getMorePosts = async () => {
-        setLoadingPost(true);
+        const toastId = toast.loading("Loading posts...", {theme: "dark"});
         try {
             const response = await axios.get(`/api/posts?take=3&skip=${posts.length}&published=${props.published}`);
             if (response.status === 200) {
@@ -132,12 +125,16 @@ const PostsPage: React.FC<PostsProps> = (props) => {
         } catch (error: any) {
             console.error(error.response.data);
         }
-        setLoadingPost(false);
+        toast.update(toastId, {
+            render: "Posts loaded",
+            type: "success",
+            isLoading: false,
+            autoClose: 1000
+        });
     }
 
     const refreshPosts = async () => {
         const length = posts.length;
-        setLoadingPost(true);
         try {
             const response = await axios.get(`/api/posts?take=${posts.length}&skip=0&published=${props.published}`);
             if (response.status === 200) {
@@ -148,18 +145,15 @@ const PostsPage: React.FC<PostsProps> = (props) => {
         } catch (error: any) {
             console.error(error.response.data);
         }
-        setLoadingPost(false);
     }
 
     return (
         <Layout title="Posts">
             <div className="flex flex-col gap-2 mx-4 justify-evenly flex-grow">
-                {loadingElement}
                 <PostList
                     posts={posts}
                     onDelete={onDelete}
                     onPublish={onPublish} />
-                {loadingPost && loadingElement}
             </div>
             {createElement}
             {hasMore && (
