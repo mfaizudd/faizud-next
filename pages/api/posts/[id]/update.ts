@@ -36,7 +36,9 @@ const UpdatePost: NextApiHandler = async (req, res) => {
                         id: Number(categoryId) ? Number(categoryId) : -1
                     }
                 }
-            } : undefined,
+            } : {
+                disconnect: true
+            },
             featuredImage,
             content
         }
