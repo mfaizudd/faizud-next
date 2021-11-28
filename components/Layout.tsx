@@ -1,5 +1,7 @@
 import Head from "next/head";
 import Header from "./Header";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -20,6 +22,7 @@ const Layout: React.FC<LayoutProps> = (props) => {
 
             <main className="container mx-auto min-h-screen p-10 flex flex-col">
 
+                <ToastContainer />
                 { props.children }
 
             </main>

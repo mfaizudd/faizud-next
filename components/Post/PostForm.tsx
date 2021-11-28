@@ -12,7 +12,6 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import Joi, { string } from "joi";
-import { ToastContainer } from "react-toastify";
 
 const MdEditor = dynamic(() => import('react-markdown-editor-lite'), {
     ssr: false,
@@ -109,7 +108,6 @@ const PostForm: React.FC<PostFormProps> = ({ post, categories, onSubmit }) => {
 
     return (
         <Layout>
-            <ToastContainer />
             <h1 className="mx-5 text-4xl font-bold">New Draft</h1>
             <Form onSubmit={submit} method="post">
                 <InputText

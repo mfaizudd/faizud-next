@@ -7,7 +7,6 @@ import { Category } from ".prisma/client";
 import axios from "axios";
 import PostForm, { PostData } from "components/Post/PostForm";
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const categories = await prisma.category.findMany();
