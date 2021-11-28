@@ -74,7 +74,13 @@ const PostsPage: React.FC<PostsProps> = (props) => {
             setPost(undefined);
             setOperation(Operation.None);
         } catch (error: any) {
-            console.error(error.response.data);
+            toast.update(toastId, {
+                render: `${error.response.status}: ${error.response.data}`,
+                type: "error",
+                isLoading: false,
+                autoClose: 5000,
+                closeButton: true
+            });
         }
         toast.update(toastId, {
             render: "Processing complete",
@@ -86,7 +92,7 @@ const PostsPage: React.FC<PostsProps> = (props) => {
 
     const onPublish = (post: Post) => {
         if (operation != Operation.None) {
-            toast("Operation in progress", {theme: "dark"});
+            toast("Operation in progress", { theme: "dark" });
             return;
         }
         showConfirm(
@@ -100,7 +106,7 @@ const PostsPage: React.FC<PostsProps> = (props) => {
 
     const onDelete = (post: Post) => {
         if (operation != Operation.None) {
-            toast("Operation in progress", {theme: "dark"});
+            toast("Operation in progress", { theme: "dark" });
             return;
         }
         showConfirm(
@@ -137,7 +143,13 @@ const PostsPage: React.FC<PostsProps> = (props) => {
                 setHasMore(posts.length + data.posts.length < data.total);
             }
         } catch (error: any) {
-            console.error(error.response.data);
+            toast.update(toastId, {
+                render: `${error.response.status}: ${error.response.data}`,
+                type: "error",
+                isLoading: false,
+                autoClose: 5000,
+                closeButton: true
+            });
         }
         toast.update(toastId, {
             render: "Posts loaded",

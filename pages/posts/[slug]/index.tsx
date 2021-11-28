@@ -13,6 +13,8 @@ import { Heading1, Heading2, Heading3 } from 'components/Headings';
 import FloatingButton from 'components/FloatingButton';
 import { Fragment, useState } from 'react';
 import Confirm, { ConfirmType } from 'components/Confirm';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 interface PostProps {
     post: Post & { author: User }
@@ -51,9 +53,27 @@ const Show: React.FC<PostProps> = ({ post }) => {
 
 
     const publishPost = async (id: number) => {
+        const toastId = toast.loading("Publishing...", { theme: "dark" })
         await fetch(`/api/posts/${id}/publish`, {
             method: 'PUT',
         });
+        try {
+            await axios.put(`/api/posts/${post?.id}/publish`);
+        } catch (error: any) {
+            toast.update(toastId, {
+                render: `${error.response.status}: ${error.response.data}`,
+                type: "error",
+                isLoading: false,
+                autoClose: 5000,
+                closeButton: true
+            });
+        }
+        toast.update(toastId, {
+            render: "Processing complete",
+            type: "success",
+            isLoading: false,
+            autoClose: 5000
+        })
         await Router.push('/posts');
     }
 
@@ -93,15 +113,15 @@ const Show: React.FC<PostProps> = ({ post }) => {
                     )}
                 </div>
             </div>
-            <Confirm 
+            <Confirm
                 title="Confirm Delete"
                 desc="Are you sure you want to delete"
                 confirmType={ConfirmType.Danger}
-                isOpen={isConfirming} 
+                isOpen={isConfirming}
                 onConfirm={() => deletePost(post.id)}
                 onCancel={() => setIsConfirming(false)}
                 onClose={() => setIsConfirming(false)}
-                />
+            />
         </Layout>
     )
 }

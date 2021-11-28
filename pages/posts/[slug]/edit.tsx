@@ -44,7 +44,13 @@ const Edit: NextPage<EditProps> = ({ post, categories }) => {
                 await Router.push('/posts/drafts');
             }
         } catch (error: any) {
-            console.error(error);
+            toast.update(toastId, {
+                render: `${error.response.status}: ${error.response.data}`,
+                type: "error",
+                isLoading: false,
+                autoClose: 5000,
+                closeButton: true
+            });
         }
     }
     return (
