@@ -54,7 +54,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         orderBy: {
             createdAt: "desc"
         },
-        take: 3
+        take: 4
     });
 
     const session = await getSession(context);
@@ -81,7 +81,7 @@ const Home: NextPage<PostsProps> = ({ posts, artworks }) => {
                 </p>
             </div>
             <div className="flex lg:flex-row m-5 flex-col items-center gap-4">
-                <div className="w-full lg:w-7/12 md:mx-auto flex flex-col md:flex-row gap-2 justify-evenly">
+                <div className="w-full lg:w-7/12 md:mx-auto flex flex-col md:flex-row gap-2 justify-evenly flex-wrap">
                     <ArtworkList posts={artworks} />
                 </div>
                 <div className="w-full lg:w-5/12 md:mx-auto flex flex-col gap-2 justify-evenly">
