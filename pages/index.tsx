@@ -21,7 +21,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         where: {
             published: true,
             category: {
-                NOT: {
+                isNot: {
                     name: "Artwork"
                 }
             }
@@ -31,6 +31,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 select: { name: true, email: true }
             },
             category: true
+        },
+        orderBy: {
+            createdAt: "desc"
         },
         take: 3
     });
