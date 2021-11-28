@@ -50,21 +50,21 @@ const PostsPage: React.FC<PostsProps> = (props) => {
     const [confirmType, setConfirmType] = useState(ConfirmType.Neutral);
 
     const doOperation = async (post?: Post, operation?: Operation) => {
+        setIsConfirm(false);
+        const toastId = toast.loading("Processing...", { theme: "dark" });
         try {
-            let response: AxiosResponse|null = null;
+            let response: AxiosResponse | null = null;
             switch (operation) {
                 case Operation.Publish:
                     response = await axios.put(`/api/posts/${post?.id}/publish`);
                     if (response?.status === 200) {
                         await refreshPosts();
-                        setIsConfirm(false);
                     }
                     break;
                 case Operation.Delete:
                     response = await axios.delete(`/api/posts/${post?.id}/delete`);
                     if (response?.status === 200) {
                         await refreshPosts();
-                        setIsConfirm(false);
                     }
                     break;
 
@@ -76,9 +76,19 @@ const PostsPage: React.FC<PostsProps> = (props) => {
         } catch (error: any) {
             console.error(error.response.data);
         }
+        toast.update(toastId, {
+            render: "Processing complete",
+            type: "success",
+            isLoading: false,
+            autoClose: 5000
+        })
     }
 
     const onPublish = (post: Post) => {
+        if (operation != Operation.None) {
+            toast("Operation in progress", {theme: "dark"});
+            return;
+        }
         showConfirm(
             "Publish post",
             "Are you sure you want to publish this post?",
@@ -89,6 +99,10 @@ const PostsPage: React.FC<PostsProps> = (props) => {
     }
 
     const onDelete = (post: Post) => {
+        if (operation != Operation.None) {
+            toast("Operation in progress", {theme: "dark"});
+            return;
+        }
         showConfirm(
             "Delete post",
             "Are you sure you want to delete this post?",
@@ -114,7 +128,7 @@ const PostsPage: React.FC<PostsProps> = (props) => {
     }
 
     const getMorePosts = async () => {
-        const toastId = toast.loading("Loading posts...", {theme: "dark"});
+        const toastId = toast.loading("Loading posts...", { theme: "dark" });
         try {
             const response = await axios.get(`/api/posts?take=3&skip=${posts.length}&published=${props.published}`);
             if (response.status === 200) {
