@@ -1,3 +1,4 @@
+import { getSession } from 'next-auth/client';
 import prisma from "lib/prisma";
 import { NextApiHandler } from "next";
 
@@ -10,6 +11,17 @@ const UpdatePost: NextApiHandler = async (req, res) => {
     if (method !== "PUT") {
         return res.status(405).end("Method not allowed");
     }
+    const session = await getSession({ req });
+    const user = await prisma.user.findUnique({
+        where: {
+            email: session?.user?.email ?? ""
+        }
+    });
+    if (user?.role != "Admin") {
+        res.status(401).end("Unauthorized");
+        return;
+    }
+
     let { title, slug, categoryId, featuredImage, content } = body;
     const existingPost = await prisma.post.findFirst({
         where: {
