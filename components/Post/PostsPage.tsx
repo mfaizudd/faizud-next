@@ -16,12 +16,12 @@ interface PostsProps {
     posts: PostItem[];
     totalPost: number;
     published: boolean;
+    loggedInUser?: User;
 }
 
 const PostsPage: React.FC<PostsProps> = (props) => {
-    const [session] = useSession();
     let createElement = null;
-    if (session) {
+    if (props.loggedInUser?.role == "Admin") {
         createElement = (
             <Link href="/posts/create" passHref>
                 <div className="fixed right-5 bottom-5">
@@ -179,7 +179,8 @@ const PostsPage: React.FC<PostsProps> = (props) => {
                 <PostList
                     posts={posts}
                     onDelete={onDelete}
-                    onPublish={onPublish} />
+                    onPublish={onPublish}
+                    loggedInUser={props.loggedInUser} />
             </div>
             {createElement}
             {hasMore && (

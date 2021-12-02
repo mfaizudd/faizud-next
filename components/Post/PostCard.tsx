@@ -1,4 +1,4 @@
-import { Post } from ".prisma/client";
+import { Post, User } from ".prisma/client";
 import Card from "../Card"
 import Link from "next/link";
 import { PostItem } from "types/PostItem";
@@ -6,15 +6,16 @@ import { Session } from "next-auth";
 
 interface PostCardProps {
     post: PostItem;
-    session: Session | null;
     onPublish?: (post: Post) => void;
     onDelete?: (post: Post) => void;
+    loggedInUser?: User;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post, session, onPublish, onDelete }) => {
-    const loggedIn = Boolean(session);
+const PostCard: React.FC<PostCardProps> = ({ post, onPublish, onDelete, loggedInUser }) => {
+    const loggedIn = Boolean(loggedInUser);
     const unpublished = post.published === false;
-    const owned = session?.user?.email === post?.author?.email;
+    const owned = loggedInUser?.email === post?.author?.email;
+    const isAdmin = loggedInUser?.role === "Admin";
     const publish = (post: Post) => {
         if (onPublish)
             onPublish(post);
@@ -32,7 +33,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, session, onPublish, onDelete 
             description={post.content ?? ""}
             route={`/posts/${post.slug}`}
         >
-            {session && loggedIn && owned && (
+            {loggedIn && isAdmin && owned && (
                 <div className="relative right-0">
                     <div className="absolute right-0 bottom-0 m-2 flex flex-column gap-2">
                         <Link href={`/posts/${post.slug}/edit`}>

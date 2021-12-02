@@ -1,4 +1,4 @@
-import { Post } from ".prisma/client";
+import { Post, User } from ".prisma/client";
 import { useSession } from "next-auth/client";
 import React from "react";
 import { PostItem } from "types/PostItem";
@@ -8,9 +8,10 @@ interface PostListProps {
     posts: PostItem[];
     onPublish?: (post: Post) => void;
     onDelete?: (post: Post) => void;
+    loggedInUser?: User;
 }
 
-const PostList: React.FC<PostListProps> = ({ posts, onPublish, onDelete }) => {
+const PostList: React.FC<PostListProps> = ({ posts, onPublish, onDelete, loggedInUser }) => {
     const [session] = useSession();
     return (
         <>
@@ -19,9 +20,9 @@ const PostList: React.FC<PostListProps> = ({ posts, onPublish, onDelete }) => {
                     <PostCard 
                         key={post.id} 
                         post={post}
-                        session={session}
                         onPublish={onPublish}
-                        onDelete={onDelete} />
+                        onDelete={onDelete}
+                        loggedInUser={loggedInUser} />
                 ))
             }
         </>
