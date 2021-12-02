@@ -31,7 +31,7 @@ interface CreateProps {
 }
 
 const Create: NextPage<CreateProps> = ({ categories, loggedInUser }) => {
-    if (loggedInUser.role != "Admin") {
+    if (loggedInUser?.role != "Admin") {
         return <Error statusCode={401} title="Unauthorized" />
     }
     const create = async (data: PostData) => {
