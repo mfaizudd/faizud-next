@@ -12,6 +12,7 @@ type PostWithAuthor = Post & { author: User }
 interface PostsProps {
     posts: PostWithAuthor[];
     artworks: PostWithAuthor[];
+    loggedInUser: User;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -58,17 +59,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     });
 
     const session = await getSession(context);
+    const loggedInUser = await prisma.user.findUnique({
+        where: { email: session?.user?.email ?? "" }
+    });
     return {
         props: {
             posts,
             artworks,
-            session
+            user: loggedInUser
         }
     }
 }
 
 
-const Home: NextPage<PostsProps> = ({ posts, artworks }) => {
+const Home: NextPage<PostsProps> = ({ posts, artworks, loggedInUser }) => {
     return (
         <Layout title="Index">
             <div className="flex flex-col justify-center items-center h-24 w-full">
@@ -82,10 +86,10 @@ const Home: NextPage<PostsProps> = ({ posts, artworks }) => {
             </div>
             <div className="flex lg:flex-row m-5 flex-col items-center gap-4">
                 <div className="w-full lg:w-7/12 md:mx-auto flex flex-col md:flex-row gap-2 justify-evenly flex-wrap">
-                    <ArtworkList posts={artworks} />
+                    <ArtworkList posts={artworks} loggedInUser={loggedInUser} />
                 </div>
                 <div className="w-full lg:w-5/12 md:mx-auto flex flex-col gap-2 justify-evenly">
-                    <PostList posts={posts} />
+                    <PostList posts={posts} loggedInUser={loggedInUser} />
                 </div>
             </div>
         </Layout>
