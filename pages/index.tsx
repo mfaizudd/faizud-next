@@ -66,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         props: {
             posts,
             artworks,
-            user: loggedInUser
+            loggedInUser
         }
     }
 }
