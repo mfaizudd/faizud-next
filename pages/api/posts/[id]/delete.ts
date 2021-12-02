@@ -8,6 +8,15 @@ const deletePost: NextApiHandler = async (req, res) => {
         query: {id},
         method
     } = req;
+    const user = await prisma.user.findUnique({
+        where: {
+            email: session?.user?.email ?? ""
+        }
+    });
+    if (user?.role != "Admin") {
+        res.status(401).end("Unauthorized");
+        return;
+    }
     const post = await prisma.post.findUnique({
         include: {author: true},
         where: {id: Number(id)}

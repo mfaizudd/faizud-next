@@ -8,12 +8,21 @@ const Publish: NextApiHandler = async (req, res) => {
         query: {id},
         method
     } = req;
+    const user = await prisma.user.findUnique({
+        where: {
+            email: session?.user?.email ?? ""
+        }
+    });
+    if (user?.role != "Admin") {
+        res.status(401).end("Unauthorized");
+        return;
+    }
     const post = await prisma.post.findUnique({
         where: { id: Number(id) },
         include: { author: true }
     });
     if (!session || session?.user?.email !== post?.author?.email) {
-        res.status(401);
+        res.status(401).end("Unauthorized");
         return;
     }
     switch (method) {
