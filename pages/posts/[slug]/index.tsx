@@ -21,7 +21,8 @@ interface PostProps {
     loggedInUser: User;
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const { params } = context;
     const post = await prisma.post.findUnique({
         where: {
             slug: String(params?.slug)
@@ -31,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         }
     });
 
-    const session = await getSession(params);
+    const session = await getSession(context);
     const loggedInUser = await prisma.user.findUnique({
         where: { email: session?.user?.email ?? "" }
     });
