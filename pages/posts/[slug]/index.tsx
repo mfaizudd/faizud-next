@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import CodeBlock from 'components/CodeBlock';
 import Error from 'next/error';
-import { useSession } from 'next-auth/client';
+import { getSession, useSession } from 'next-auth/client';
 import { Check, Trash } from 'react-feather';
 import { Heading1, Heading2, Heading3 } from 'components/Headings';
 import FloatingButton from 'components/FloatingButton';
@@ -17,7 +17,8 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 
 interface PostProps {
-    post: Post & { author: User }
+    post: Post & { author: User };
+    loggedInUser: User;
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
@@ -30,35 +31,42 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         }
     });
 
+    const session = await getSession(params);
+    const loggedInUser = await prisma.user.findUnique({
+        where: { email: session?.user?.email ?? "" }
+    });
+
     return {
         props: {
-            post
+            post,
+            loggedInUser
         }
     };
 }
 
-const Show: React.FC<PostProps> = ({ post }) => {
-    const [session, loading] = useSession();
+const Show: React.FC<PostProps> = ({ post, loggedInUser }) => {
     const [isConfirming, setIsConfirming] = useState(false);
 
-    if (loading) {
-        return <div>Authenticating...</div>;
-    }
     if (post == null) {
         return <Error statusCode={404} />;
     }
-    const loggedIn = Boolean(session);
+    const loggedIn = Boolean(loggedInUser);
     const unpublished = post.published === false;
-    const owned = session?.user?.email === post.author.email;
-
+    const owned = loggedInUser?.email === post.author.email;
+    const isAdmin = loggedInUser?.role === "Admin";
 
     const publishPost = async (id: number) => {
         const toastId = toast.loading("Publishing...", { theme: "dark" })
-        await fetch(`/api/posts/${id}/publish`, {
-            method: 'PUT',
-        });
         try {
-            await axios.put(`/api/posts/${post?.id}/publish`);
+            const response = await axios.put(`/api/posts/${id}/publish`);
+            if (response.status === 200) {
+                toast.update(toastId, {
+                    render: "Update complete",
+                    type: "success",
+                    isLoading: false,
+                    autoClose: 5000
+                });
+            }
         } catch (error: any) {
             toast.update(toastId, {
                 render: `${error.response.status}: ${error.response.data}`,
@@ -68,20 +76,29 @@ const Show: React.FC<PostProps> = ({ post }) => {
                 closeButton: true
             });
         }
-        toast.update(toastId, {
-            render: "Processing complete",
-            type: "success",
-            isLoading: false,
-            autoClose: 5000
-        })
         await Router.push('/posts');
     }
 
-    // TODO: Add confirmation before deleting
     const deletePost = async (id: number) => {
-        await fetch(`/api/posts/${id}/delete`, {
-            method: 'DELETE',
-        });
+        const toastId = toast.loading("Deleting post...", { theme: "dark" });
+        try {
+            const response = await axios.delete(`/api/posts/${id}/delete`);
+            if (response.status === 200) {
+                toast.update(toastId, {
+                    render: "Deleted",
+                    type: "success",
+                    isLoading: false,
+                    autoClose: 5000
+                });
+            }
+        } catch (error: any) {
+            toast.update(toastId, {
+                render: `${error.response.status}: ${error.response.data}`,
+                type: "error",
+                isLoading: false,
+                autoClose: 5000
+            });
+        }
         await Router.push('/posts');
     }
 
@@ -101,12 +118,12 @@ const Show: React.FC<PostProps> = ({ post }) => {
                     {post.content ?? ""}
                 </ReactMarkdown>
                 <div className="fixed bottom-5 right-5 flex flex-row gap-2">
-                    {loggedIn && unpublished && owned && (
+                    {loggedIn && isAdmin && unpublished && owned && (
                         <FloatingButton onClick={() => publishPost(post.id)} title="Publish">
                             <Check className="text-white" />
                         </FloatingButton>
                     )}
-                    {loggedIn && owned && (
+                    {loggedIn && isAdmin && owned && (
                         <FloatingButton onClick={() => setIsConfirming(true)} title="Delete">
                             <Trash className="text-white" />
                         </FloatingButton>
