@@ -67,6 +67,7 @@ const Show: React.FC<PostProps> = ({ post, loggedInUser }) => {
                     isLoading: false,
                     autoClose: 5000
                 });
+                await Router.push('/posts');
             }
         } catch (error: any) {
             toast.update(toastId, {
@@ -77,7 +78,6 @@ const Show: React.FC<PostProps> = ({ post, loggedInUser }) => {
                 closeButton: true
             });
         }
-        await Router.push('/posts');
     }
 
     const deletePost = async (id: number) => {
@@ -91,6 +91,7 @@ const Show: React.FC<PostProps> = ({ post, loggedInUser }) => {
                     isLoading: false,
                     autoClose: 5000
                 });
+                await Router.push('/posts');
             }
         } catch (error: any) {
             toast.update(toastId, {
@@ -100,7 +101,6 @@ const Show: React.FC<PostProps> = ({ post, loggedInUser }) => {
                 autoClose: 5000
             });
         }
-        await Router.push('/posts');
     }
 
     return (
