@@ -3,25 +3,37 @@ import Router from "next/router";
 import 'react-markdown-editor-lite/lib/index.css';
 import { GetServerSideProps, NextPage } from "next";
 import prisma from "lib/prisma";
-import { Category } from ".prisma/client";
+import { Category, User } from ".prisma/client";
 import axios from "axios";
 import PostForm, { PostData } from "components/Post/PostForm";
 import { toast } from 'react-toastify';
+import { getSession } from "next-auth/client";
+import Error from "next/error";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+    const session = await getSession(context);
+    const loggedInUser = await prisma.user.findUnique({
+        where: { email: session?.user?.email ?? "" }
+    });
     const categories = await prisma.category.findMany();
+
     return {
         props: {
-            categories
+            categories,
+            loggedInUser
         }
     }
 }
 
 interface CreateProps {
     categories: Category[];
+    loggedInUser: User;
 }
 
-const Create: NextPage<CreateProps> = ({ categories }) => {
+const Create: NextPage<CreateProps> = ({ categories, loggedInUser }) => {
+    if (loggedInUser.role != "Admin") {
+        return <Error statusCode={401} title="Unauthorized" />
+    }
     const create = async (data: PostData) => {
         const toastId = toast.loading("Creating...", { theme: "dark" });
         try {

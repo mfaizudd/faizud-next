@@ -3,12 +3,18 @@ import Router from "next/router";
 import 'react-markdown-editor-lite/lib/index.css';
 import { GetServerSideProps, NextPage } from "next";
 import prisma from "lib/prisma";
-import { Category, Post } from ".prisma/client";
+import { Category, Post, User } from ".prisma/client";
 import axios from "axios";
 import PostForm, { PostData } from "components/Post/PostForm";
 import { toast } from "react-toastify";
+import { getSession } from "next-auth/client";
+import Error from "next/error";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+    const session = await getSession(context);
+    const loggedInUser = await prisma.user.findUnique({
+        where: { email: session?.user?.email ?? "" }
+    });
     const categories = await prisma.category.findMany();
     const post = await prisma.post.findUnique({
         where: { slug: String(context?.params?.slug) }
@@ -16,7 +22,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
         props: {
             post,
-            categories
+            categories,
+            loggedInUser
         }
     }
 }
@@ -24,9 +31,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 interface EditProps {
     post: Post;
     categories: Category[];
+    loggedInUser: User;
 }
 
-const Edit: NextPage<EditProps> = ({ post, categories }) => {
+const Edit: NextPage<EditProps> = ({ post, categories, loggedInUser }) => {
+    if (loggedInUser.role != "Admin") {
+        return <Error statusCode={401} title="Unauthorized"/>
+    }
     const onSubmit = async (data: PostData) => {
         const toastId = toast.loading("Updating...", { theme: "dark" })
         try {
