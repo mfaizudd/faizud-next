@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Router from "next/router";
 import 'react-markdown-editor-lite/lib/index.css';
 import { GetServerSideProps, NextPage } from "next";
@@ -31,10 +31,16 @@ interface CreateProps {
 }
 
 const Create: NextPage<CreateProps> = ({ categories, loggedInUser }) => {
+    const [isCreating, setIsCreating] = useState(false);
     if (loggedInUser?.role != "Admin") {
         return <Error statusCode={401} title="Unauthorized" />
     }
     const create = async (data: PostData) => {
+        if (isCreating) {
+            toast.error("Creation in progress", {theme: "dark"});
+            return;
+        }
+        setIsCreating(true);
         const toastId = toast.loading("Creating...", { theme: "dark" });
         try {
             const response = await axios.post('/api/posts', data);
@@ -47,13 +53,17 @@ const Create: NextPage<CreateProps> = ({ categories, loggedInUser }) => {
                 });
                 await Router.push('/posts/drafts');
             }
-        } catch (error: any) {
+        } 
+        catch (error: any) {
             toast.update(toastId, {
                 render: `${error.response.status}: ${error.response.data}`,
                 type: "error",
                 isLoading: false,
                 autoClose: 5000
             });
+        }
+        finally {
+            setIsCreating(false);
         }
     }
     return (

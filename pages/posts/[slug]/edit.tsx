@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Router from "next/router";
 import 'react-markdown-editor-lite/lib/index.css';
 import { GetServerSideProps, NextPage } from "next";
@@ -35,10 +35,16 @@ interface EditProps {
 }
 
 const Edit: NextPage<EditProps> = ({ post, categories, loggedInUser }) => {
+    const [isUpdating, setIsUpdating] = useState(false);
     if (loggedInUser.role != "Admin") {
-        return <Error statusCode={401} title="Unauthorized"/>
+        return <Error statusCode={401} title="Unauthorized" />
     }
     const onSubmit = async (data: PostData) => {
+        if (isUpdating) {
+            toast.error("Update in progress", {theme: "dark"});
+            return;
+        }
+        setIsUpdating(true);
         const toastId = toast.loading("Updating...", { theme: "dark" })
         try {
             await axios.put(`/api/posts/${post.id}/update`, data);
@@ -62,6 +68,9 @@ const Edit: NextPage<EditProps> = ({ post, categories, loggedInUser }) => {
                 autoClose: 5000,
                 closeButton: true
             });
+        }
+        finally {
+            setIsUpdating(false);
         }
     }
     return (
