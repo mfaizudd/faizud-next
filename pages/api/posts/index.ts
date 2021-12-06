@@ -12,7 +12,14 @@ const Post: NextApiHandler = async (req, res) => {
         case 'GET':
             const { take, skip, published } = query;
             const posts = await prisma.post.findMany({
-                where: { published: published === "true" },
+                where: {
+                    published: published === "true",
+                    category: {
+                        isNot: {
+                            name: "Artwork"
+                        }
+                    }
+                },
                 include: {
                     author: true,
                     category: true
@@ -29,7 +36,7 @@ const Post: NextApiHandler = async (req, res) => {
                 let { title, slug, categoryId, featuredImage, content } = body;
                 const session = await getSession({ req });
                 const user = await prisma.user.findUnique({
-                    where: { 
+                    where: {
                         email: session?.user?.email ?? ""
                     }
                 });
