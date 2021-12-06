@@ -78,6 +78,7 @@ const Home: NextPage<PostsProps> = (props) => {
     const [isConfirm, setIsConfirm] = useState(false);
     const [post, setPost] = useState<Post>();
     const [posts, setPosts] = useState(props.posts);
+    const [artworks, setArtworks] = useState(props.artworks);
     const deletePost = (post: Post) => {
         setPost(post);
         setIsConfirm(true);
@@ -89,7 +90,7 @@ const Home: NextPage<PostsProps> = (props) => {
             const response = await axios.delete(`/api/posts/${post?.id}/delete`);
             if (response?.status === 200) {
                 await refreshPosts();
-                // TODO: refresh artworks
+                await refreshArtworks();
             }
             setPost(undefined);
         } catch (error: any) {
@@ -110,10 +111,21 @@ const Home: NextPage<PostsProps> = (props) => {
     }
     const refreshPosts = async () => {
         try {
-            const response = await axios.get(`/api/posts?take=${posts.length}&skip=0&published=true`);
+            const response = await axios.get(`/api/posts?take=${artworks.length}&skip=0&published=true`);
             if (response.status === 200) {
                 const data = response.data;
                 setPosts(data.posts);
+            }
+        } catch (error: any) {
+            console.error(error.response.data);
+        }
+    }
+    const refreshArtworks = async () => {
+        try {
+            const response = await axios.get(`/api/artworks?take=${posts.length}&skip=0&published=true`);
+            if (response.status === 200) {
+                const data = response.data;
+                setArtworks(data.artworks);
             }
         } catch (error: any) {
             console.error(error.response.data);
@@ -132,7 +144,10 @@ const Home: NextPage<PostsProps> = (props) => {
             </div>
             <div className="flex lg:flex-row m-5 flex-col items-center gap-4">
                 <div className="w-full lg:w-7/12 md:mx-auto flex flex-col md:flex-row gap-2 justify-evenly flex-wrap">
-                    <ArtworkList posts={props.artworks} loggedInUser={props.loggedInUser} />
+                    <ArtworkList 
+                        posts={artworks} 
+                        loggedInUser={props.loggedInUser}
+                        onDelete={artwork => deletePost(artwork)} />
                 </div>
                 <div className="w-full lg:w-5/12 md:mx-auto flex flex-col gap-2 justify-evenly">
                     <PostList
