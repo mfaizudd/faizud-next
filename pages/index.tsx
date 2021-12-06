@@ -111,7 +111,7 @@ const Home: NextPage<PostsProps> = (props) => {
     }
     const refreshPosts = async () => {
         try {
-            const response = await axios.get(`/api/posts?take=${artworks.length}&skip=0&published=true`);
+            const response = await axios.get(`/api/posts?take=3&skip=0&published=true`);
             if (response.status === 200) {
                 const data = response.data;
                 setPosts(data.posts);
@@ -122,7 +122,7 @@ const Home: NextPage<PostsProps> = (props) => {
     }
     const refreshArtworks = async () => {
         try {
-            const response = await axios.get(`/api/artworks?take=${posts.length}&skip=0&published=true`);
+            const response = await axios.get(`/api/artworks?take=3&skip=0&published=true`);
             if (response.status === 200) {
                 const data = response.data;
                 setArtworks(data.artworks);
