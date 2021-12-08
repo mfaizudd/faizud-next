@@ -60,6 +60,7 @@ const Header: React.FC = () => {
                             <div className="flex space-x-4 w-full justify-center">
                                 <NavLink route="/" name="Home" />
                                 <NavLink route="/posts" name="Posts" />
+                                <NavLink route="/artworks" name="Artworks" />
                             </div>
                         </div>
                     </div>
