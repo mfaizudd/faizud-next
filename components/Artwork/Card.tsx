@@ -15,7 +15,7 @@ const Card: React.FC<CardProps> = (props) => {
             <div className="h-full relative">
                 <div className="h-80 w-full">
                     <div className="w-full object-cover h-full relative">
-                        <Image src={props.image || "/enbandeng.png"} layout="fill" objectFit="cover" alt="Man looking at item at a store" />
+                        <Image src={props.image || "/enbandeng.png"} layout="fill" objectFit="cover" alt={props.title}/>
                     </div>
                 </div>
                 <Link href={props.route ?? "#"} passHref={true}>
