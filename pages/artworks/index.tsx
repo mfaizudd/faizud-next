@@ -1,8 +1,8 @@
 import type { GetServerSideProps, NextPage } from 'next'
 import prisma from 'lib/prisma';
 import { Category, Post, User } from '.prisma/client';
-import PostsPage from 'components/Post/PostsPage';
 import { getSession } from 'next-auth/client';
+import ArtworksPage from 'components/Artwork/ArtworksPage';
 
 type ArtworkItem = Post & { author: User, category: Category }
 
@@ -46,7 +46,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 const ArtworksIndex: NextPage<ArtworkProps> = (props) => {
-    return <PostsPage {...props} published={true} />
+    return <ArtworksPage {...props} published={true} />
 }
 
 export default ArtworksIndex;
