@@ -45,8 +45,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 }
 
-const PostsIndex: NextPage<ArtworkProps> = (props) => {
+const ArtworksIndex: NextPage<ArtworkProps> = (props) => {
     return <PostsPage {...props} published={true} />
 }
 
-export default PostsIndex;
+export default ArtworksIndex;
