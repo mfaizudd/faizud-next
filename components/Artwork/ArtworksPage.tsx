@@ -1,14 +1,13 @@
 import { Post, User, Category } from ".prisma/client";
 import axios, { AxiosResponse } from "axios";
-import { useSession } from "next-auth/client";
 import React, { useState } from "react";
 import Confirm, { ConfirmType } from "components/Confirm";
 import Link from "next/link";
 import FloatingButton from "components/FloatingButton";
 import { FilePlus } from "react-feather"
-import PostList from "components/Post/PostList";
 import Layout from "components/Layout";
 import { toast } from "react-toastify";
+import ArtworkList from "./ArtworkList";
 
 type ArtworkItem = Post & { author: User, category: Category }
 
@@ -176,7 +175,7 @@ const ArtworksPage: React.FC<ArtworksProps> = (props) => {
     return (
         <Layout title="Posts">
             <div className="flex flex-col gap-2 mx-4 justify-evenly flex-grow">
-                <PostList
+                <ArtworkList
                     posts={posts}
                     onDelete={onDelete}
                     onPublish={onPublish}
