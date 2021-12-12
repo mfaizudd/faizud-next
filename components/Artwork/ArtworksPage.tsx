@@ -140,22 +140,33 @@ const ArtworksPage: React.FC<ArtworksProps> = (props) => {
                 const data = response.data;
                 setPosts([...posts, ...data.posts]);
                 setHasMore(posts.length + data.posts.length < data.total);
+                toast.update(toastId, {
+                    render: "Posts loaded",
+                    type: "success",
+                    isLoading: false,
+                    autoClose: 1000
+                });
             }
         } catch (error: any) {
+            if (error?.response) {
+                toast.update(toastId, {
+                    render: `${error.response.status}: ${error.response.data}`,
+                    type: "error",
+                    isLoading: false,
+                    autoClose: 5000,
+                    closeButton: true
+                });
+                return;
+            }
             toast.update(toastId, {
-                render: `${error.response.status}: ${error.response.data}`,
+                render: `Unexpected error occured`,
                 type: "error",
                 isLoading: false,
                 autoClose: 5000,
                 closeButton: true
             });
+            console.log(error);
         }
-        toast.update(toastId, {
-            render: "Posts loaded",
-            type: "success",
-            isLoading: false,
-            autoClose: 1000
-        });
     }
 
     const refreshPosts = async () => {
@@ -174,7 +185,7 @@ const ArtworksPage: React.FC<ArtworksProps> = (props) => {
 
     return (
         <Layout title="Posts">
-            <div className="flex flex-col gap-2 mx-4 justify-evenly flex-grow">
+            <div className="flex flex-row gap-2 mx-4 flex-shrink">
                 <ArtworkList
                     posts={posts}
                     onDelete={onDelete}
