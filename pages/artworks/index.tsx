@@ -30,7 +30,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         take: 3
     });
     const totalPost = await prisma.post.count({
-        where: { published: true }
+        where: {
+            published: true,
+            category: {
+                name: "Artwork"
+            }
+        }
     });
     const session = await getSession(context);
     const loggedInUser = await prisma.user.findUnique({
