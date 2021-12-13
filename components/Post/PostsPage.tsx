@@ -188,7 +188,7 @@ const PostsPage: React.FC<PostsProps> = (props) => {
                     More Posts
                 </div>
             )}
-            <div className="text-center">
+            <div className="text-center py-5">
                 <Link href="/">Back</Link>
             </div>
             <Confirm
